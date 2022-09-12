@@ -2,6 +2,7 @@ package helper;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public abstract class JDBC {
     private static final String protocol = "jdbc";
@@ -14,7 +15,7 @@ public abstract class JDBC {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
-    public static void openConnection()
+    public static Connection openConnection()
     {
         try {
             Class.forName(driver); // Locate Driver
@@ -25,6 +26,11 @@ public abstract class JDBC {
         {
             System.out.println("Error:" + e.getMessage());
         }
+        return connection;
+    }
+
+    public static Connection getConnection(){
+        return connection;
     }
 
     public static void closeConnection() {

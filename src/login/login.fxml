@@ -3,11 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="388.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller = "login.loginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.loginController">
    <children>
-      <Label fx:id="username" layoutX="104.0" layoutY="86.0" text="username" />
-      <Label fx:id="password" layoutX="104.0" layoutY="133.0" text="password" />
-      <TextField fx:id="usernameField" layoutX="169.0" layoutY="82.0" />
-      <TextField fx:id="passwordField" layoutX="169.0" layoutY="129.0" />
+      <Label fx:id="username" layoutX="104.0" layoutY="74.0" text="username" />
+      <Label fx:id="password" layoutX="105.0" layoutY="113.0" text="password" />
+      <TextField fx:id="usernameField" layoutX="169.0" layoutY="70.0" />
+      <Button fx:id="loginbutton" layoutX="169.0" layoutY="153.0" mnemonicParsing="false" onAction="#setLoginbutton" text="login" />
+      <Label layoutX="76.0" layoutY="187.0" text="Language:" />
+      <Label fx:id="language" layoutX="142.0" layoutY="187.0" text="Label" />
+      <Label layoutX="230.0" layoutY="187.0" text="Time Zone:" />
+      <Label fx:id="timeZone" layoutX="304.0" layoutY="187.0" text="Label" />
+      <PasswordField fx:id="passwordField" layoutX="169.0" layoutY="109.0" />
    </children>
 </AnchorPane>

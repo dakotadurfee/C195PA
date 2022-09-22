@@ -1,4 +1,4 @@
-package sample;
+package views;
 
 import helper.JDBC;
 import javafx.application.Application;
@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../login/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 460, 242));
         primaryStage.show();

@@ -1,4 +1,4 @@
-package login;
+package views;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -43,8 +42,9 @@ public class loginController implements Initializable {
     public void setLoginbutton(ActionEvent actionEvent) throws IOException {
         String usern = usernameField.getText();
         String passw = passwordField.getText();
+        /*
         if(usern.equals("sqlUser") && passw.equals("Passw0rd!")){
-            Parent root = FXMLLoader.load(getClass().getResource("/sample/mainMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 924, 400);
             stage.setTitle("");
@@ -57,6 +57,13 @@ public class loginController implements Initializable {
             alert.setContentText("Username or password are incorrect");
             alert.showAndWait();
         }
+        */
+        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 924, 400);
+        stage.setTitle("");
+        stage.setScene(scene);
+        stage.show();
     }
 }
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="924.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.mainMenuController">
+   <children>
+      <TableView fx:id="appointmentsTable" layoutX="11.0" layoutY="115.0" prefHeight="200.0" prefWidth="902.0">
+        <columns>
+          <TableColumn fx:id="appIDCol" prefWidth="75.0" text="Appt ID" />
+          <TableColumn fx:id="titleCol" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="descriptionCol" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="locationCol" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="contactCol" prefWidth="75.0" text="Contact" />
+            <TableColumn fx:id="typeCol" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="startTimeCol" prefWidth="75.0" text="Start Time" />
+            <TableColumn fx:id="endTimeCol" prefWidth="75.0" text="End Time" />
+            <TableColumn fx:id="startDateCol" prefWidth="75.0" text="Start Date" />
+            <TableColumn fx:id="createdByCol" prefWidth="75.0" text="Created By" />
+            <TableColumn fx:id="customerIDCol" prefWidth="75.0" text="Customer ID" />
+            <TableColumn fx:id="userIDCol" prefWidth="75.0" text="User ID" />
+        </columns>
+      </TableView>
+      <Label layoutX="24.0" layoutY="58.0" text="Appointment Schedule" />
+      <RadioButton layoutX="173.0" layoutY="58.0" mnemonicParsing="false" text="Weekly">
+         <toggleGroup>
+            <ToggleGroup fx:id="appointments" />
+         </toggleGroup></RadioButton>
+      <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Monthly" toggleGroup="$appointments" />
+      <Button fx:id="addAppointmentButton" layoutX="662.0" layoutY="346.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />
+   </children>
+</AnchorPane>

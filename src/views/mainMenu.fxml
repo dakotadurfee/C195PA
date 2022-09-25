@@ -7,18 +7,18 @@
    <children>
       <TableView fx:id="appointmentsTable" layoutX="11.0" layoutY="115.0" prefHeight="200.0" prefWidth="902.0">
         <columns>
-          <TableColumn fx:id="appIDCol" prefWidth="75.0" text="Appt ID" />
-          <TableColumn fx:id="titleCol" prefWidth="75.0" text="Title" />
-            <TableColumn fx:id="descriptionCol" prefWidth="75.0" text="Description" />
-            <TableColumn fx:id="locationCol" prefWidth="75.0" text="Location" />
-            <TableColumn fx:id="contactCol" prefWidth="75.0" text="Contact" />
-            <TableColumn fx:id="typeCol" prefWidth="75.0" text="Type" />
-            <TableColumn fx:id="startTimeCol" prefWidth="75.0" text="Start Time" />
-            <TableColumn fx:id="endTimeCol" prefWidth="75.0" text="End Time" />
-            <TableColumn fx:id="startDateCol" prefWidth="75.0" text="Start Date" />
-            <TableColumn fx:id="createdByCol" prefWidth="75.0" text="Created By" />
-            <TableColumn fx:id="customerIDCol" prefWidth="75.0" text="Customer ID" />
-            <TableColumn fx:id="userIDCol" prefWidth="75.0" text="User ID" />
+          <TableColumn fx:id="firstCol" prefWidth="75.0" text="Appt ID" />
+          <TableColumn fx:id="secondCol" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="thirdCol" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="fourthCol" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="fifthCol" prefWidth="75.0" text="Contact" />
+            <TableColumn fx:id="sixthCol" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="seventhCol" prefWidth="75.0" text="Start Time" />
+            <TableColumn fx:id="eighthCol" prefWidth="75.0" text="End Time" />
+            <TableColumn fx:id="ninthCol" prefWidth="75.0" text="Start Date" />
+            <TableColumn fx:id="tenthCol" prefWidth="75.0" text="Created By" />
+            <TableColumn fx:id="eleventhCol" prefWidth="75.0" text="Customer ID" />
+            <TableColumn fx:id="twelfthCol" prefWidth="75.0" text="User ID" />
         </columns>
       </TableView>
       <Label layoutX="24.0" layoutY="58.0" text="Appointment Schedule" />
@@ -26,7 +26,8 @@
          <toggleGroup>
             <ToggleGroup fx:id="appointments" />
          </toggleGroup></RadioButton>
-      <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" selected="true" text="Monthly" toggleGroup="$appointments" />
+      <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewAppointments" selected="true" text="Monthly" toggleGroup="$appointments" />
       <Button fx:id="addAppointmentButton" layoutX="662.0" layoutY="346.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />
+      <RadioButton layoutX="349.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCustomers" text="Customers" toggleGroup="$appointments" />
    </children>
 </AnchorPane>

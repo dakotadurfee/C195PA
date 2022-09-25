@@ -15,17 +15,22 @@
       <Label layoutX="49.0" layoutY="343.0" text="User ID" />
       <Label layoutX="49.0" layoutY="380.0" text="Start Date" />
       <Label layoutX="49.0" layoutY="417.0" text="Start Time" />
-      <TextField layoutX="188.0" layoutY="80.0" />
-      <TextField layoutX="188.0" layoutY="117.0" />
-      <TextField layoutX="188.0" layoutY="154.0" />
-      <TextField layoutX="188.0" layoutY="191.0" />
-      <TextField layoutX="188.0" layoutY="228.0" />
-      <TextField layoutX="188.0" layoutY="265.0" />
-      <TextField layoutX="188.0" layoutY="302.0" />
-      <TextField layoutX="188.0" layoutY="339.0" />
-      <DatePicker layoutX="188.0" layoutY="376.0" />
+      <TextField fx:id="appointmentIDField" editable="false" layoutX="188.0" layoutY="80.0" />
+      <TextField fx:id="titleField" layoutX="188.0" layoutY="117.0" />
+      <TextField fx:id="descriptionField" layoutX="188.0" layoutY="154.0" />
+      <TextField fx:id="locationField" layoutX="188.0" layoutY="191.0" />
+      <TextField fx:id="typeField" layoutX="188.0" layoutY="228.0" />
+      <TextField fx:id="contactIDField" layoutX="188.0" layoutY="265.0" />
+      <TextField fx:id="customerIDField" layoutX="188.0" layoutY="302.0" />
+      <TextField fx:id="userIDField" layoutX="188.0" layoutY="339.0" />
+      <DatePicker fx:id="startDateField" layoutX="188.0" layoutY="376.0" />
       <Label layoutX="500.0" layoutY="380.0" text="End Date" />
-      <DatePicker layoutX="578.0" layoutY="376.0" />
+      <DatePicker fx:id="endDateField" layoutX="578.0" layoutY="376.0" />
       <Label layoutX="500.0" layoutY="417.0" text="End Time" />
+      <Button fx:id="addAppointmentSave" layoutX="613.0" layoutY="520.0" mnemonicParsing="false" onAction="#onSave" text="save" />
+      <Spinner fx:id="startTimeHours" editable="true" layoutX="188.0" layoutY="413.0" max="12" min="0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="startTimeMinutes" layoutX="275.0" layoutY="413.0" max="59" min="0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="endTimeHours" layoutX="579.0" layoutY="413.0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="endTimeMinutes" layoutX="665.0" layoutY="413.0" prefHeight="25.0" prefWidth="67.0" />
    </children>
 </AnchorPane>

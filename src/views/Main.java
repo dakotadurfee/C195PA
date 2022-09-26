@@ -9,9 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main extends Application {
 
@@ -65,8 +71,6 @@ public class Main extends Application {
             String description = rs.getString("Description");
             String location = rs.getString("Location");
             String type = rs.getString("Type");
-            String start = rs.getString("Start");
-            String end = rs.getString("End");
             String createDate = rs.getString("Create_Date");
             String createdBy = rs.getString("Created_By");
             String lastUpdate = rs.getString("Last_Update");
@@ -74,6 +78,27 @@ public class Main extends Application {
             int customerID = rs.getInt("Customer_ID");
             int userID = rs.getInt("User_ID");
             int contactID = rs.getInt("Contact_ID");
+
+            String db_start = rs.getString("Start");
+            String db_end = rs.getString("End");
+
+            DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            LocalDateTime utc_start_dt = LocalDateTime.parse(db_start, dt_formatter);
+            LocalDateTime utc_end_dt = LocalDateTime.parse(db_end, dt_formatter);
+
+            ZoneId utc_zone = ZoneId.of("UTC");
+            ZoneId user_zone = ZoneId.systemDefault();
+
+            ZonedDateTime utc_start_zdt = utc_start_dt.atZone(utc_zone);
+            ZonedDateTime utc_end_zdt = utc_end_dt.atZone(utc_zone);
+
+            ZonedDateTime user_start_zdt = utc_start_zdt.withZoneSameInstant(user_zone);
+            ZonedDateTime user_end_zdt = utc_end_zdt.withZoneSameInstant(user_zone);
+
+            String start = user_start_zdt.toLocalDateTime().format(dt_formatter);
+            String end = user_end_zdt.toLocalDateTime().format(dt_formatter);
+
             Appointment appointment = new Appointment(appointment_ID, customerID, userID, title, description, location, contactID, type, start, end, createDate, createdBy, lastUpdate, lastUpdatedBy);
             Appointment.addAppointment(appointment);
         }

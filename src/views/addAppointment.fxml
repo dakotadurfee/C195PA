@@ -29,8 +29,8 @@
       <Label layoutX="500.0" layoutY="417.0" text="End Time" />
       <Button fx:id="addAppointmentSave" layoutX="613.0" layoutY="520.0" mnemonicParsing="false" onAction="#onSave" text="save" />
       <Spinner fx:id="startTimeHours" editable="true" layoutX="188.0" layoutY="413.0" max="12" min="0" prefHeight="25.0" prefWidth="67.0" />
-      <Spinner fx:id="startTimeMinutes" layoutX="275.0" layoutY="413.0" max="59" min="0" prefHeight="25.0" prefWidth="67.0" />
-      <Spinner fx:id="endTimeHours" layoutX="579.0" layoutY="413.0" prefHeight="25.0" prefWidth="67.0" />
-      <Spinner fx:id="endTimeMinutes" layoutX="665.0" layoutY="413.0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="startTimeMinutes" editable="true" layoutX="275.0" layoutY="413.0" max="59" min="0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="endTimeHours" layoutX="579.0" layoutY="413.0" max="12" min="0" prefHeight="25.0" prefWidth="67.0" />
+      <Spinner fx:id="endTimeMinutes" layoutX="665.0" layoutY="413.0" max="59" min="0" prefHeight="25.0" prefWidth="67.0" />
    </children>
 </AnchorPane>

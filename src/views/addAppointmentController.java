@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class addAppointmentController implements Initializable {
@@ -43,6 +44,7 @@ public class addAppointmentController implements Initializable {
 
     public void onSave(ActionEvent actionEvent) throws IOException {
         boolean error = false;
+        boolean dateError = false;
         String title = null;
         String description = null;
         String location = null;
@@ -114,13 +116,14 @@ public class addAppointmentController implements Initializable {
         }
 
         String startDate = null;
+        String end = null;
         try {
             startDate = startDateField.getValue().toString();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Must select start date");
             alert.showAndWait();
-            error = true;
+            dateError = true;
         }
 
         String startTimeH = startTimeHours.getValue().toString();
@@ -139,6 +142,8 @@ public class addAppointmentController implements Initializable {
         }
 
         String start = startDate + " " + startTimeH + ":" + startTimeM + ":" + "00";
+        if(dateError == false) {
+            LocalDateTime LDTstart = LocalDateTime.parse(startDate + "T" + startTimeH + ":" + startTimeM + ":" + "00");
 
         String endTimeH = endTimeHours.getValue().toString();
         String endTimeM = endTimeMinutes.getValue().toString();
@@ -154,10 +159,42 @@ public class addAppointmentController implements Initializable {
         if (Integer.parseInt(endTimeM) < 10) {
             endTimeM = "0" + endTimeM;
         }
-        String end = startDate + " " + endTimeH + ":" + endTimeM + ":" + "00";
+        end = startDate + " " + endTimeH + ":" + endTimeM + ":" + "00";
+        LocalDateTime LDTend = LocalDateTime.parse(startDate + "T" + endTimeH + ":" + endTimeM + ":" + "00");
 
-
-
+        for(Appointment appointment : Appointment.getAllAppointments()){
+            if (customerID == appointment.getCustomerID()) {
+                String appointmentStart = appointment.getStart();
+                String appointmentEnd = appointment.getEnd();
+                appointmentStart = appointmentStart.replace(' ', 'T');
+                appointmentEnd = appointmentEnd.replace(' ', 'T');
+                System.out.println(appointmentStart);
+                LocalDateTime appointmentLDTstart = LocalDateTime.parse(appointmentStart);
+                LocalDateTime appointmentLDTend = LocalDateTime.parse(appointmentEnd);
+                if (LDTstart.isAfter(appointmentLDTstart) && LDTstart.isBefore(appointmentLDTend)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                    alert.showAndWait();
+                    error = true;
+                } else if (LDTend.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                    alert.showAndWait();
+                    error = true;
+                } else if (LDTstart.isBefore(appointmentLDTstart) && LDTend.isAfter(appointmentLDTend)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                    alert.showAndWait();
+                    error = true;
+                } else if (LDTstart.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                    alert.showAndWait();
+                    error = true;
+                }
+            }
+            }
+        }
 
         String createDate = LocalDateTime.now().toString();
         String lastUpdate = createDate;

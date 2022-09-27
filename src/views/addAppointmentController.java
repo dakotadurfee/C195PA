@@ -145,63 +145,70 @@ public class addAppointmentController implements Initializable {
         if(dateError == false) {
             LocalDateTime LDTstart = LocalDateTime.parse(startDate + "T" + startTimeH + ":" + startTimeM + ":" + "00");
 
-        String endTimeH = endTimeHours.getValue().toString();
-        String endTimeM = endTimeMinutes.getValue().toString();
-        if (endTimeH.equals("0")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must select end time");
-            alert.showAndWait();
-            error = true;
-        } else if (Integer.parseInt(endTimeH) < 10) {
-            endTimeH = "0" + endTimeH;
-        }
-
-        if (Integer.parseInt(endTimeM) < 10) {
-            endTimeM = "0" + endTimeM;
-        }
-        end = startDate + " " + endTimeH + ":" + endTimeM + ":" + "00";
-        LocalDateTime LDTend = LocalDateTime.parse(startDate + "T" + endTimeH + ":" + endTimeM + ":" + "00");
-
-        for(Appointment appointment : Appointment.getAllAppointments()){
-            if (customerID == appointment.getCustomerID()) {
-                String appointmentStart = appointment.getStart();
-                String appointmentEnd = appointment.getEnd();
-                appointmentStart = appointmentStart.replace(' ', 'T');
-                appointmentEnd = appointmentEnd.replace(' ', 'T');
-                System.out.println(appointmentStart);
-                LocalDateTime appointmentLDTstart = LocalDateTime.parse(appointmentStart);
-                LocalDateTime appointmentLDTend = LocalDateTime.parse(appointmentEnd);
-                if (LDTstart.isAfter(appointmentLDTstart) && LDTstart.isBefore(appointmentLDTend)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                    alert.showAndWait();
-                    error = true;
-                } else if (LDTend.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                    alert.showAndWait();
-                    error = true;
-                } else if (LDTstart.isBefore(appointmentLDTstart) && LDTend.isAfter(appointmentLDTend)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                    alert.showAndWait();
-                    error = true;
-                } else if (LDTstart.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                    alert.showAndWait();
-                    error = true;
-                }
+            String endTimeH = endTimeHours.getValue().toString();
+            String endTimeM = endTimeMinutes.getValue().toString();
+            if (endTimeH.equals("0")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Must select end time");
+                alert.showAndWait();
+                error = true;
+            } else if (Integer.parseInt(endTimeH) < 10) {
+                endTimeH = "0" + endTimeH;
             }
+
+            if (Integer.parseInt(endTimeM) < 10) {
+                endTimeM = "0" + endTimeM;
+            }
+            end = startDate + " " + endTimeH + ":" + endTimeM + ":" + "00";
+            LocalDateTime LDTend = LocalDateTime.parse(startDate + "T" + endTimeH + ":" + endTimeM + ":" + "00");
+
+            if (LDTend.isBefore(LDTstart) || LDTend.isEqual(LDTstart)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("End time must be after start time");
+                alert.showAndWait();
+                error = true;
+            } else {
+                for (Appointment appointment : Appointment.getAllAppointments()) {
+                    if (customerID == appointment.getCustomerID()) {
+                        String appointmentStart = appointment.getStart();
+                        String appointmentEnd = appointment.getEnd();
+                        appointmentStart = appointmentStart.replace(' ', 'T');
+                        appointmentEnd = appointmentEnd.replace(' ', 'T');
+                        LocalDateTime appointmentLDTstart = LocalDateTime.parse(appointmentStart);
+                        LocalDateTime appointmentLDTend = LocalDateTime.parse(appointmentEnd);
+                        if (LDTstart.isAfter(appointmentLDTstart) && LDTstart.isBefore(appointmentLDTend)) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                            alert.showAndWait();
+                            error = true;
+                        } else if (LDTend.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                            alert.showAndWait();
+                            error = true;
+                        } else if (LDTstart.isBefore(appointmentLDTstart) && LDTend.isAfter(appointmentLDTend)) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                            alert.showAndWait();
+                            error = true;
+                        } else if (LDTstart.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                            alert.showAndWait();
+                            error = true;
+                        }
+                    }
+                }
             }
         }
 
         String createDate = LocalDateTime.now().toString();
+        createDate = createDate.replace('T',' ');
         String lastUpdate = createDate;
 
         int i = Appointment.getAllAppointments().size() - 1;
         int dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
-        if(error == false) {
+        if(error == false && dateError == false) {
             Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
             Appointment.addAppointment(appointment);
             toMain(actionEvent);

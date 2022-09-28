@@ -25,9 +25,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static classes.Appointment.allAppointments;
-import static classes.Customers.allCustomers;
-
 public class mainMenuController implements Initializable {
     public ToggleGroup appointments;
     public TableView appointmentsTable;
@@ -61,7 +58,7 @@ public class mainMenuController implements Initializable {
         tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        appointmentsTable.setItems(allAppointments);
+        appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
     }
     
@@ -108,7 +105,7 @@ public class mainMenuController implements Initializable {
         tenthCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>(""));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>(""));
-        appointmentsTable.setItems(allCustomers);
+        appointmentsTable.setItems(Customers.getAllCustomers());
         addCustomer.setVisible(true);
         addAppointmentButton.setVisible(false);
     }
@@ -139,7 +136,7 @@ public class mainMenuController implements Initializable {
         tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        appointmentsTable.setItems(allAppointments);
+        appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
         addAppointmentButton.setVisible(true);
     }

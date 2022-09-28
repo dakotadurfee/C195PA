@@ -11,8 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Appointment {
-    public static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-
+    private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private int id;
     private int customerID;
     private int userID;

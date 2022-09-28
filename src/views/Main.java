@@ -1,6 +1,7 @@
 package views;
 
 import classes.Appointment;
+import classes.CountryData;
 import classes.Customers;
 import helper.JDBC;
 import javafx.application.Application;
@@ -34,6 +35,10 @@ public class Main extends Application {
         JDBC.openConnection();
         getCustomers();
         getAppointments();
+        addCountries();
+        addUSDivisions();
+        addUKDivisions();
+        addCanadaDivisions();
         launch(args);
         JDBC.closeConnection();
     }
@@ -101,6 +106,50 @@ public class Main extends Application {
 
             Appointment appointment = new Appointment(appointment_ID, customerID, userID, title, description, location, contactID, type, start, end, createDate, createdBy, lastUpdate, lastUpdatedBy);
             Appointment.addAppointment(appointment);
+        }
+    }
+
+    public static void addCountries() throws SQLException{
+        String sql = "SELECT Country FROM countries";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            String country = rs.getString("Country");
+            CountryData.addCountry(country);
+        }
+    }
+
+    public static void addUSDivisions() throws SQLException{
+        String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 1";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            String division = rs.getString("Division");
+            CountryData.addUSDivision(division);
+        }
+    }
+
+    public static void addUKDivisions() throws SQLException{
+        String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 2";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            String division = rs.getString("Division");
+            CountryData.addUKDivision(division);
+        }
+    }
+
+    public static void addCanadaDivisions() throws SQLException{
+        String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 3";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            String division = rs.getString("Division");
+            CountryData.addCanadaDivision(division);
         }
     }
 }

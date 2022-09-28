@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="692.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.AddCustomerController">
+   <children>
+      <Label layoutX="41.0" layoutY="43.0" text="Customer ID" />
+      <Label layoutX="41.0" layoutY="81.0" text="Customer Name" />
+      <Label layoutX="41.0" layoutY="119.0" text="Address" />
+      <Label layoutX="41.0" layoutY="157.0" text="postal Code" />
+      <Label layoutX="41.0" layoutY="195.0" text="Phone" />
+      <Label layoutX="41.0" layoutY="233.0" text="Country" />
+      <TextField fx:id="customerIDField" editable="false" layoutX="162.0" layoutY="39.0" />
+      <TextField fx:id="customerNameField" layoutX="162.0" layoutY="77.0" />
+      <TextField fx:id="addressField" layoutX="162.0" layoutY="115.0" />
+      <TextField fx:id="postalCodeField" layoutX="162.0" layoutY="153.0" />
+      <TextField fx:id="phoneField" layoutX="162.0" layoutY="191.0" />
+      <ComboBox fx:id="countryField" layoutX="162.0" layoutY="229.0" prefWidth="150.0" promptText="Select Country" />
+      <Label layoutX="346.0" layoutY="233.0" text="Division" />
+      <ComboBox fx:id="divisionField" layoutX="409.0" layoutY="229.0" prefWidth="150.0" promptText="Select State/Province" />
+   </children>
+</AnchorPane>

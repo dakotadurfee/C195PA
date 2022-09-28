@@ -94,6 +94,12 @@ public class addAppointmentController implements Initializable {
             alert.showAndWait();
             error = true;
         }
+        if(contactID < 1 || contactID > 3){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Contact ID does not match an existing contact ID");
+            alert.showAndWait();
+            error = true;
+        }
 
         int customerID = 0;
         try {

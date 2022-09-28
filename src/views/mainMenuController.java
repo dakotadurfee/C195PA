@@ -44,6 +44,7 @@ public class mainMenuController implements Initializable {
     public TableColumn tenthCol;
     public TableColumn eleventhCol;
     public TableColumn twelfthCol;
+    public Button addCustomer;
 
 
     @Override
@@ -61,6 +62,7 @@ public class mainMenuController implements Initializable {
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         appointmentsTable.setItems(allAppointments);
+        addCustomer.setVisible(false);
     }
     
     public void addAppointment(ActionEvent actionEvent) throws IOException {
@@ -68,6 +70,15 @@ public class mainMenuController implements Initializable {
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 820, 608);
         stage.setTitle("Add Appointment");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void addCustomer(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/views/AddCustomer.fxml"));
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 820, 608);
+        stage.setTitle("Add Customer");
         stage.setScene(scene);
         stage.show();
     }
@@ -98,7 +109,8 @@ public class mainMenuController implements Initializable {
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>(""));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>(""));
         appointmentsTable.setItems(allCustomers);
-        //change column names to 1st column, 2nd column.... and when user selects customers radio button change text of table columns
+        addCustomer.setVisible(true);
+        addAppointmentButton.setVisible(false);
     }
 
     public void viewAppointments(ActionEvent actionEvent){
@@ -128,5 +140,7 @@ public class mainMenuController implements Initializable {
         eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         appointmentsTable.setItems(allAppointments);
+        addCustomer.setVisible(false);
+        addAppointmentButton.setVisible(true);
     }
 }

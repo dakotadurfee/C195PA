@@ -29,5 +29,6 @@
       <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewAppointments" selected="true" text="Monthly" toggleGroup="$appointments" />
       <Button fx:id="addAppointmentButton" layoutX="662.0" layoutY="346.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />
       <RadioButton layoutX="349.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCustomers" text="Customers" toggleGroup="$appointments" />
+      <Button fx:id="addCustomer" layoutX="59.0" layoutY="346.0" mnemonicParsing="false" onAction="#addCustomer" text="Add Customer" />
    </children>
 </AnchorPane>

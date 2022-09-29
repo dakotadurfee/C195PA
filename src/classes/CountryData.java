@@ -13,7 +13,7 @@ public class CountryData {
         countryList.add(country);
     }
 
-    public ObservableList<String> getCountryList(){
+    public static ObservableList<String> getCountryList(){
         return countryList;
     }
 
@@ -21,15 +21,13 @@ public class CountryData {
         USDivisionList.add(division);
     }
 
-    public ObservableList<String> getUSdivisionList(){
-        return USDivisionList;
-    }
+    public static ObservableList<String> getUSdivisionList(){ return USDivisionList; }
 
     public static void addUKDivision(String division){
         UKDivisionList.add(division);
     }
 
-    public ObservableList<String> getUKdivisionList(){
+    public static ObservableList<String> getUKdivisionList(){
         return UKDivisionList;
     }
 
@@ -37,7 +35,7 @@ public class CountryData {
         CanadaDivisionList.add(division);
     }
 
-    public ObservableList<String> getCanadaDivisionList(){
+    public static ObservableList<String> getCanadadivisionList(){
         return CanadaDivisionList;
     }
 }

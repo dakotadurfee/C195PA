@@ -9,13 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalTimeStringConverter;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class addAppointmentController implements Initializable {
@@ -134,12 +134,7 @@ public class addAppointmentController implements Initializable {
 
         String startTimeH = startTimeHours.getValue().toString();
         String startTimeM = startTimeMinutes.getValue().toString();
-        if (startTimeH.equals("0")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must select start time");
-            alert.showAndWait();
-            error = true;
-        } else if (Integer.parseInt(startTimeH) < 10) {
+        if(Integer.parseInt(startTimeH) < 10) {
             startTimeH = "0" + startTimeH;
         }
 
@@ -153,20 +148,45 @@ public class addAppointmentController implements Initializable {
 
             String endTimeH = endTimeHours.getValue().toString();
             String endTimeM = endTimeMinutes.getValue().toString();
-            if (endTimeH.equals("0")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Must select end time");
-                alert.showAndWait();
-                error = true;
-            } else if (Integer.parseInt(endTimeH) < 10) {
+
+            if (Integer.parseInt(endTimeH) < 10) {
                 endTimeH = "0" + endTimeH;
             }
+
 
             if (Integer.parseInt(endTimeM) < 10) {
                 endTimeM = "0" + endTimeM;
             }
             end = startDate + " " + endTimeH + ":" + endTimeM + ":" + "00";
             LocalDateTime LDTend = LocalDateTime.parse(startDate + "T" + endTimeH + ":" + endTimeM + ":" + "00");
+
+            LocalDateTime openTime = LocalDateTime.parse(startDate + "T08:00:00");
+            LocalDateTime closeTime = LocalDateTime.parse(startDate + "T22:00:00");
+
+            ZoneId ESTzone = ZoneId.of("US/Eastern");
+            ZoneId userZone = ZoneId.systemDefault();
+
+            ZonedDateTime startZDT = LDTstart.atZone(userZone);
+            ZonedDateTime endZDT = LDTend.atZone(userZone);
+
+            ZonedDateTime userStartEST = startZDT.withZoneSameInstant(ESTzone);
+            ZonedDateTime userEndEST = endZDT.withZoneSameInstant(ESTzone);
+
+            if(userStartEST.toLocalDateTime().isBefore(openTime) || userEndEST.toLocalDateTime().isAfter(closeTime)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Selected time is outside of company hours: 8:00a.m. - 10:00p.m. EST");
+                alert.showAndWait();
+                error = true;
+            }
+
+            /*
+            if(LDTstart.isBefore(openTime) || LDTend.isAfter(closeTime)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Selected time is outside of company hours: 8:00a.m. - 10:00p.m. EST");
+                alert.showAndWait();
+                error = true;
+            }
+             */
 
             if (LDTend.isBefore(LDTstart) || LDTend.isEqual(LDTstart)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -209,7 +229,8 @@ public class addAppointmentController implements Initializable {
         }
 
         String createDate = LocalDateTime.now().toString();
-        createDate = createDate.replace('T',' ');
+        createDate = createDate.substring(0,createDate.length() - 10);
+        createDate = createDate.replace('T', ' ');
         String lastUpdate = createDate;
 
         int i = Appointment.getAllAppointments().size() - 1;
@@ -224,8 +245,8 @@ public class addAppointmentController implements Initializable {
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1105, 400);
-        stage.setTitle("");
+        Scene scene = new Scene(root, 1449, 400);
+        stage.setTitle("Main Menu");
         stage.setScene(scene);
         stage.show();
     }

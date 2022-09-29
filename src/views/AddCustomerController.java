@@ -89,15 +89,23 @@ public class AddCustomerController implements Initializable {
         } else{
             phone = phoneField.getText();
         }
-        try{
+
+        try {
+            String countryName = (String) countryField.getSelectionModel().getSelectedItem();
             String divisionName = (String) divisionField.getSelectionModel().getSelectedItem();
+            if(divisionName.equals(null)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Must select country and division");
+                alert.showAndWait();
+                error = true;
+            }
             String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = " + "'" + divisionName + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 divisionID = rs.getInt("Division_ID");
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Must select country and division");
             alert.showAndWait();
@@ -130,7 +138,7 @@ public class AddCustomerController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("");
+        stage.setTitle("Main Menu");
         stage.setScene(scene);
         stage.show();
     }

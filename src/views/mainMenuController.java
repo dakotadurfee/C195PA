@@ -20,6 +20,7 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class mainMenuController implements Initializable {
@@ -41,6 +42,7 @@ public class mainMenuController implements Initializable {
     public Button addCustomer;
     public static Appointment mAppointment;
     public Button modifyAppointment;
+    public Button deleteAppointmentButton;
 
 
     @Override
@@ -108,6 +110,7 @@ public class mainMenuController implements Initializable {
         addCustomer.setVisible(true);
         addAppointmentButton.setVisible(false);
         modifyAppointment.setVisible(false);
+        deleteAppointmentButton.setVisible(false);
     }
 
     public void viewAppointments(ActionEvent actionEvent){
@@ -140,6 +143,7 @@ public class mainMenuController implements Initializable {
         addCustomer.setVisible(false);
         addAppointmentButton.setVisible(true);
         modifyAppointment.setVisible(true);
+        deleteAppointmentButton.setVisible(true);
     }
 
 
@@ -159,6 +163,25 @@ public class mainMenuController implements Initializable {
             stage.setTitle("Modify Appointment");
             stage.setScene(scene);
             stage.show();
+        }
+    }
+
+    public void deleteAppointment(ActionEvent actionEvent){
+        Appointment appointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+        if(appointment == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Must select appointment to be deleted");
+            alert.showAndWait();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setContentText("Are you sure you want to delete this appointment?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK){
+                Appointment.deleteAppointment(appointment);
+            }
         }
     }
 }

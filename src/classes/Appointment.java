@@ -165,5 +165,14 @@ public class Appointment {
         this.lastUpdateBy = lastUpdateBy;
     }
 
+    public static void deleteAppointment(Appointment appointment){
+        System.out.println(allAppointments.size());
+        for(int i = 0; i < allAppointments.size(); i++){
+            if(appointment == allAppointments.get(i)){
+                allAppointments.remove(i);
+            }
+        }
+    }
+
 
 }

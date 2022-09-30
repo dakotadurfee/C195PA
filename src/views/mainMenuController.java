@@ -11,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -42,6 +39,8 @@ public class mainMenuController implements Initializable {
     public TableColumn eleventhCol;
     public TableColumn twelfthCol;
     public Button addCustomer;
+    public static Appointment mAppointment;
+    public Button modifyAppointment;
 
 
     @Override
@@ -108,6 +107,7 @@ public class mainMenuController implements Initializable {
         appointmentsTable.setItems(Customers.getAllCustomers());
         addCustomer.setVisible(true);
         addAppointmentButton.setVisible(false);
+        modifyAppointment.setVisible(false);
     }
 
     public void viewAppointments(ActionEvent actionEvent){
@@ -139,5 +139,26 @@ public class mainMenuController implements Initializable {
         appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
         addAppointmentButton.setVisible(true);
+        modifyAppointment.setVisible(true);
+    }
+
+
+    public void modifyAppointment(ActionEvent actionEvent) throws IOException {
+
+        mAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+        if(mAppointment == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Must select appointment to be modified");
+            alert.showAndWait();
+        }
+        else {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/ModifyAppointment.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 820, 608);
+            stage.setTitle("Modify Appointment");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 }

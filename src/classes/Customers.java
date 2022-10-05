@@ -116,4 +116,12 @@ public class Customers {
     public static ObservableList<Customers> getAllCustomers() {
         return allCustomers;
     }
+
+    public static void deleteCustomer(Customers customer){
+        for(int i = 0; i < allCustomers.size(); i++){
+            if(customer == allCustomers.get(i)){
+                allCustomers.remove(i);
+            }
+        }
+    }
 }

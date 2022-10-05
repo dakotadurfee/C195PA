@@ -32,5 +32,7 @@
       <Button fx:id="addCustomer" layoutX="59.0" layoutY="346.0" mnemonicParsing="false" onAction="#addCustomer" text="Add Customer" />
       <Button fx:id="modifyAppointment" layoutX="811.0" layoutY="346.0" mnemonicParsing="false" onAction="#modifyAppointment" text="Modify Appointment" />
       <Button fx:id="deleteAppointmentButton" layoutX="972.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment" />
+      <Button fx:id="modifyCustomerButton" layoutX="177.0" layoutY="346.0" mnemonicParsing="false" onAction="#modifyCustomer" text="Modify Customer" />
+      <Button fx:id="customerDeleteButton" layoutX="315.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
    </children>
 </AnchorPane>

@@ -233,10 +233,7 @@ public class ModifyAppointmentController implements Initializable {
             }
         }
 
-        String createDate = LocalDateTime.now().toString();
-        createDate = createDate.substring(0,createDate.length() - 10);
-        createDate = createDate.replace('T', ' ');
-        String lastUpdate = createDate;
+        String lastUpdate = LocalDateTime.now().toString();
 
         int i = Appointment.getAllAppointments().size() - 1;
         int dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
@@ -250,7 +247,6 @@ public class ModifyAppointmentController implements Initializable {
             mAppointment.setType(type);
             mAppointment.setStart(start);
             mAppointment.setEnd(end);
-            mAppointment.setCreateDate(createDate);
             mAppointment.setCreatedBy("Script");
             mAppointment.setLastUpdate(lastUpdate);
             mAppointment.setLastUpdateBy("Script");

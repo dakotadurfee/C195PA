@@ -18,6 +18,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+
 public class addAppointmentController implements Initializable {
     public TextField appointmentIDField;
     public TextField titleField;
@@ -37,15 +38,21 @@ public class addAppointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        int dynamicID = 0;
         int i = Appointment.getAllAppointments().size() - 1;
         System.out.println(i);
         if(i <= 0) {
-            int dynamicID = 1;
+            dynamicID = 1;
+            appointmentIDField.setText(Integer.toString(dynamicID));
+        }
+        else{
+            dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
             appointmentIDField.setText(Integer.toString(dynamicID));
         }
     }
 
     public void onSave(ActionEvent actionEvent) throws IOException {
+        int dynamicID = 0;
         boolean error = false;
         boolean dateError = false;
         String title = null;
@@ -238,12 +245,15 @@ public class addAppointmentController implements Initializable {
 
         int i = Appointment.getAllAppointments().size() - 1;
         if(i <= 0) {
-            int dynamicID = 1;
-            if (error == false && dateError == false) {
-                Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
-                Appointment.addAppointment(appointment);
-                toMain(actionEvent);
-            }
+            dynamicID = 1;
+        }
+        else {
+            dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
+        }
+        if (error == false && dateError == false) {
+            Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
+            Appointment.addAppointment(appointment);
+            toMain(actionEvent);
         }
     }
 

@@ -41,8 +41,10 @@ public class mainMenuController implements Initializable {
     public TableColumn twelfthCol;
     public Button addCustomer;
     public static Appointment mAppointment;
+    public static Customers mCustomer;
     public Button modifyAppointment;
     public Button deleteAppointmentButton;
+    public Button modifyCustomerButton;
 
 
     @Override
@@ -61,6 +63,7 @@ public class mainMenuController implements Initializable {
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
+        modifyCustomerButton.setVisible(false);
     }
     
     public void addAppointment(ActionEvent actionEvent) throws IOException {
@@ -108,6 +111,7 @@ public class mainMenuController implements Initializable {
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>(""));
         appointmentsTable.setItems(Customers.getAllCustomers());
         addCustomer.setVisible(true);
+        modifyCustomerButton.setVisible(true);
         addAppointmentButton.setVisible(false);
         modifyAppointment.setVisible(false);
         deleteAppointmentButton.setVisible(false);
@@ -141,6 +145,7 @@ public class mainMenuController implements Initializable {
         twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
+        modifyCustomerButton.setVisible(false);
         addAppointmentButton.setVisible(true);
         modifyAppointment.setVisible(true);
         deleteAppointmentButton.setVisible(true);
@@ -181,6 +186,48 @@ public class mainMenuController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK){
                 Appointment.deleteAppointment(appointment);
+            }
+        }
+    }
+
+    public void modifyCustomer(ActionEvent actionEvent) throws IOException {
+        mCustomer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
+        if(mCustomer == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Must select customer to be modified");
+            alert.showAndWait();
+        }
+        else{
+            Parent root = FXMLLoader.load(getClass().getResource("/views/ModifyCustomer.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 692, 400);
+            stage.setTitle("Modify Customer");
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
+    public void deleteCustomer(ActionEvent actionEvent) throws IOException {
+        Customers customer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
+        if(customer == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Must select customer to be deleted");
+            alert.showAndWait();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setContentText("Are you sure you want to delete this customer? All appointments this customer has will be deleted.");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.isPresent() && result.get() == ButtonType.OK){
+                for(Appointment appointment : Appointment.getAllAppointments()){
+                    if(appointment.getCustomerID() == customer.getCustomerID()){
+                        Appointment.deleteAppointment(appointment);
+                    }
+                }
+                Customers.deleteCustomer(customer);
             }
         }
     }

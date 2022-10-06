@@ -1,6 +1,7 @@
 package views;
 
 import classes.Appointment;
+import classes.Customers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,7 +42,7 @@ public class addAppointmentController implements Initializable {
         int dynamicID = 0;
         int i = Appointment.getAllAppointments().size() - 1;
         System.out.println(i);
-        if(i <= 0) {
+        if(i < 0) {
             dynamicID = 1;
             appointmentIDField.setText(Integer.toString(dynamicID));
         }
@@ -114,6 +115,18 @@ public class addAppointmentController implements Initializable {
         int customerID = 0;
         try {
             customerID = Integer.parseInt(customerIDField.getText());
+            boolean found = false;
+            for(Customers customer : Customers.getAllCustomers()){
+                if(customer.getCustomerID() == customerID){
+                    found = true;
+                }
+            }
+            if(found == false){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Customer ID does not match an existing customer ID");
+                alert.showAndWait();
+                error = true;
+            }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Must enter an integer in customer ID field");
@@ -232,6 +245,11 @@ public class addAppointmentController implements Initializable {
                             alert.setContentText("This appointment overlaps with another appointment for the same customer");
                             alert.showAndWait();
                             error = true;
+                        } else if(LDTstart.isEqual(appointmentLDTstart) || LDTend.isEqual(appointmentLDTend)){
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
+                            alert.showAndWait();
+                            error = true;
                         }
                     }
                 }
@@ -244,7 +262,7 @@ public class addAppointmentController implements Initializable {
         String lastUpdate = createDate;
 
         int i = Appointment.getAllAppointments().size() - 1;
-        if(i <= 0) {
+        if(i < 0) {
             dynamicID = 1;
         }
         else {

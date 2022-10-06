@@ -20,6 +20,10 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -45,6 +49,7 @@ public class mainMenuController implements Initializable {
     public Button modifyAppointment;
     public Button deleteAppointmentButton;
     public Button modifyCustomerButton;
+    public Button deleteCustomerButton;
 
 
     @Override
@@ -64,6 +69,7 @@ public class mainMenuController implements Initializable {
         appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
         modifyCustomerButton.setVisible(false);
+        deleteCustomerButton.setVisible(false);
     }
     
     public void addAppointment(ActionEvent actionEvent) throws IOException {
@@ -112,12 +118,108 @@ public class mainMenuController implements Initializable {
         appointmentsTable.setItems(Customers.getAllCustomers());
         addCustomer.setVisible(true);
         modifyCustomerButton.setVisible(true);
+        deleteCustomerButton.setVisible(true);
         addAppointmentButton.setVisible(false);
         modifyAppointment.setVisible(false);
         deleteAppointmentButton.setVisible(false);
     }
 
-    public void viewAppointments(ActionEvent actionEvent){
+    public void onMonthly(ActionEvent actionEvent){
+        firstCol.setText("Appt ID");
+        secondCol.setText("Title");
+        thirdCol.setText("Description");
+        fourthCol.setText("Location");
+        fifthCol.setText("Contact");
+        sixthCol.setText("Type");
+        seventhCol.setText("Start Time");
+        eighthCol.setText("End Time");
+        ninthCol.setText("Start Date");
+        tenthCol.setText("Created By");
+        eleventhCol.setText("Customer ID");
+        twelfthCol.setText("User ID");
+
+        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        LocalDateTime currentLDT = LocalDateTime.now();
+        String currentMonth = currentLDT.toString();
+        currentMonth = currentMonth.substring(5,7);
+        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
+        for(Appointment appointment : Appointment.getAllAppointments()){
+            String month = appointment.getStart().substring(5,7);
+            if(month.equals(currentMonth)){
+                monthlyAppointments.add(appointment);
+            }
+        }
+        appointmentsTable.setItems(monthlyAppointments);
+        addCustomer.setVisible(false);
+        modifyCustomerButton.setVisible(false);
+        deleteCustomerButton.setVisible(false);
+        addAppointmentButton.setVisible(true);
+        modifyAppointment.setVisible(true);
+        deleteAppointmentButton.setVisible(true);
+    }
+
+    public void onWeekly(ActionEvent actionEvent){
+        firstCol.setText("Appt ID");
+        secondCol.setText("Title");
+        thirdCol.setText("Description");
+        fourthCol.setText("Location");
+        fifthCol.setText("Contact");
+        sixthCol.setText("Type");
+        seventhCol.setText("Start Time");
+        eighthCol.setText("End Time");
+        ninthCol.setText("Start Date");
+        tenthCol.setText("Created By");
+        eleventhCol.setText("Customer ID");
+        twelfthCol.setText("User ID");
+
+        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        LocalDateTime currentLDT = LocalDateTime.now();
+        LocalDateTime sundayBefore = currentLDT.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDateTime saturdayAfter = currentLDT.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
+        for(Appointment appointment : Appointment.getAllAppointments()){
+            String start = appointment.getStart();
+            start = start.replace(' ', 'T');
+            LocalDateTime LDTstart = LocalDateTime.parse(start);
+
+            if((LDTstart.isEqual(sundayBefore) || LDTstart.isAfter(sundayBefore)) && (LDTstart.isEqual(saturdayAfter) || LDTstart.isBefore(saturdayAfter))){
+                weeklyAppointments.add(appointment);
+            }
+        }
+
+        appointmentsTable.setItems(weeklyAppointments);
+        addCustomer.setVisible(false);
+        modifyCustomerButton.setVisible(false);
+        deleteCustomerButton.setVisible(false);
+        addAppointmentButton.setVisible(true);
+        modifyAppointment.setVisible(true);
+        deleteAppointmentButton.setVisible(true);
+    }
+
+    public void onAll(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
         thirdCol.setText("Description");
@@ -146,9 +248,11 @@ public class mainMenuController implements Initializable {
         appointmentsTable.setItems(Appointment.getAllAppointments());
         addCustomer.setVisible(false);
         modifyCustomerButton.setVisible(false);
+        deleteCustomerButton.setVisible(false);
         addAppointmentButton.setVisible(true);
         modifyAppointment.setVisible(true);
         deleteAppointmentButton.setVisible(true);
+
     }
 
 
@@ -222,13 +326,21 @@ public class mainMenuController implements Initializable {
             alert.setContentText("Are you sure you want to delete this customer? All appointments this customer has will be deleted.");
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK){
+                ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
                 for(Appointment appointment : Appointment.getAllAppointments()){
                     if(appointment.getCustomerID() == customer.getCustomerID()){
-                        Appointment.deleteAppointment(appointment);
+                        appointmentList.add(appointment);
                     }
                 }
+                deleteAppointments(appointmentList);
                 Customers.deleteCustomer(customer);
             }
+        }
+    }
+
+    public void deleteAppointments(ObservableList<Appointment> appointmentList){
+        for(int i = 0; i < appointmentList.size(); i++){
+            Appointment.deleteAppointment(appointmentList.get(i));
         }
     }
 }

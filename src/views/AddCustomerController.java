@@ -37,7 +37,13 @@ public class AddCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int i = Customers.getAllCustomers().size() - 1;
-        int dynamicID = Customers.getAllCustomers().get(i).getCustomerID() + 1;
+        int dynamicID = 0;
+        if(i < 0){
+            dynamicID = 1;
+        }
+        else {
+            dynamicID = Customers.getAllCustomers().get(i).getCustomerID() + 1;
+        }
         customerIDField.setText(Integer.toString(dynamicID));
         countryField.setItems(CountryData.getCountryList());
     }

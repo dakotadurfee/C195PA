@@ -22,17 +22,18 @@
         </columns>
       </TableView>
       <Label layoutX="24.0" layoutY="58.0" text="Appointment Schedule" />
-      <RadioButton layoutX="173.0" layoutY="58.0" mnemonicParsing="false" text="Weekly">
+      <RadioButton layoutX="173.0" layoutY="58.0" mnemonicParsing="false" onAction="#onWeekly" text="Weekly">
          <toggleGroup>
             <ToggleGroup fx:id="appointments" />
          </toggleGroup></RadioButton>
-      <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewAppointments" selected="true" text="Monthly" toggleGroup="$appointments" />
+      <RadioButton layoutX="262.0" layoutY="58.0" mnemonicParsing="false" onAction="#onMonthly" selected="true" text="Monthly" toggleGroup="$appointments" />
       <Button fx:id="addAppointmentButton" layoutX="662.0" layoutY="346.0" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment" />
       <RadioButton layoutX="349.0" layoutY="58.0" mnemonicParsing="false" onAction="#viewCustomers" text="Customers" toggleGroup="$appointments" />
       <Button fx:id="addCustomer" layoutX="59.0" layoutY="346.0" mnemonicParsing="false" onAction="#addCustomer" text="Add Customer" />
       <Button fx:id="modifyAppointment" layoutX="811.0" layoutY="346.0" mnemonicParsing="false" onAction="#modifyAppointment" text="Modify Appointment" />
       <Button fx:id="deleteAppointmentButton" layoutX="972.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment" />
       <Button fx:id="modifyCustomerButton" layoutX="177.0" layoutY="346.0" mnemonicParsing="false" onAction="#modifyCustomer" text="Modify Customer" />
-      <Button fx:id="customerDeleteButton" layoutX="315.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
+      <Button fx:id="deleteCustomerButton" layoutX="315.0" layoutY="346.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
+      <RadioButton layoutX="453.0" layoutY="58.0" mnemonicParsing="false" onAction="#onAll" selected="true" text="All appointments" toggleGroup="$appointments" />
    </children>
 </AnchorPane>

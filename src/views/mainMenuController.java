@@ -290,6 +290,11 @@ public class mainMenuController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK){
                 Appointment.deleteAppointment(appointment);
+                String appointmentID = String.valueOf(appointment.getId());
+                String appointmentType = appointment.getType();
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText("Appointment cancelled: \nAppointment ID: " + appointmentID + "\nType: "+ appointmentType);
+                a.showAndWait();
             }
         }
     }

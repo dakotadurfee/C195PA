@@ -46,7 +46,7 @@ public class ModifyAppointmentController implements Initializable {
         customerIDField.setText(Integer.toString(mAppointment.getCustomerID()));
         userIDField.setText(Integer.toString(mAppointment.getUserID()));
         startDateField.setPromptText(mAppointment.getStart().substring(0,10));
-        startTimeHours.setPromptText(mAppointment.getStart().substring(12,13));
+        startTimeHours.setVisibleRow
         startTimeMinutes.setPromptText(mAppointment.getStart().substring(15,16));
         endTimeHours.setPromptText(mAppointment.getEnd().substring(12,13));
         endTimeMinutes.setPromptText(mAppointment.getEnd().substring(15,16));

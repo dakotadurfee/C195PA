@@ -10,7 +10,7 @@
       <Label layoutX="49.0" layoutY="158.0" text="Description" />
       <Label layoutX="49.0" layoutY="195.0" text="Location" />
       <Label layoutX="49.0" layoutY="232.0" text="Type" />
-      <Label layoutX="48.0" layoutY="269.0" text="Contact ID" />
+      <Label layoutX="48.0" layoutY="269.0" text="Contact" />
       <Label layoutX="48.0" layoutY="306.0" text="Customer ID" />
       <Label layoutX="49.0" layoutY="343.0" text="User ID" />
       <Label layoutX="49.0" layoutY="380.0" text="Start Date" />
@@ -20,7 +20,6 @@
       <TextField fx:id="descriptionField" layoutX="188.0" layoutY="154.0" />
       <TextField fx:id="locationField" layoutX="188.0" layoutY="191.0" />
       <TextField fx:id="typeField" layoutX="188.0" layoutY="228.0" />
-      <TextField fx:id="contactIDField" layoutX="188.0" layoutY="265.0" />
       <TextField fx:id="customerIDField" layoutX="188.0" layoutY="302.0" />
       <TextField fx:id="userIDField" layoutX="188.0" layoutY="339.0" />
       <DatePicker fx:id="startDateField" layoutX="188.0" layoutY="376.0" />
@@ -31,5 +30,6 @@
       <Spinner fx:id="endTimeHours" layoutX="580.0" layoutY="413.0" max="23" min="0" prefHeight="25.0" prefWidth="67.0" />
       <Spinner fx:id="endTimeMinutes" layoutX="665.0" layoutY="413.0" max="59" min="0" prefHeight="25.0" prefWidth="67.0" />
       <Button layoutX="673.0" layoutY="488.0" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
+      <ComboBox fx:id="contactField" layoutX="188.0" layoutY="265.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

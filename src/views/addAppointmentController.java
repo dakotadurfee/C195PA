@@ -2,6 +2,9 @@ package views;
 
 import classes.Appointment;
 import classes.Customers;
+import helper.JDBC;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +18,9 @@ import javafx.util.converter.LocalTimeStringConverter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -36,12 +42,12 @@ public class addAppointmentController implements Initializable {
     public Spinner startTimeMinutes;
     public Spinner endTimeHours;
     public Spinner endTimeMinutes;
+    public ComboBox contactField;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int dynamicID = 0;
         int i = Appointment.getAllAppointments().size() - 1;
-        System.out.println(i);
         if(i < 0) {
             dynamicID = 1;
             appointmentIDField.setText(Integer.toString(dynamicID));
@@ -50,15 +56,32 @@ public class addAppointmentController implements Initializable {
             dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
             appointmentIDField.setText(Integer.toString(dynamicID));
         }
+
+        String sql = "SELECT Contact_Name FROM contacts";
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ObservableList<String> contactNames = FXCollections.observableArrayList();
+            while(rs.next()){
+                String contact = rs.getString("Contact_Name");
+                contactNames.add(contact);
+            }
+            contactField.setItems(contactNames);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    public void onSave(ActionEvent actionEvent) throws IOException {
+    public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         int dynamicID = 0;
         boolean error = false;
         boolean dateError = false;
         String title = null;
         String description = null;
         String location = null;
+        String contact = null;
+        int contactID = 0;
         String type = null;
         if (titleField.getText().equals("")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -96,21 +119,18 @@ public class addAppointmentController implements Initializable {
             type = typeField.getText();
         }
 
-        int contactID = 0;
-        try {
-            contactID = Integer.parseInt(contactIDField.getText());
-        } catch (NumberFormatException e) {
+
+        contact = (String)contactField.getSelectionModel().getSelectedItem();
+        if(contact == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must enter an integer in contact ID field");
+            alert.setContentText("Must select contact");
             alert.showAndWait();
             error = true;
         }
-        if(contactID < 1 || contactID > 3){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Contact ID does not match an existing contact ID");
-            alert.showAndWait();
-            error = true;
+        else {
+            contactID = getContactID(contact);
         }
+
 
         int customerID = 0;
         try {
@@ -273,6 +293,19 @@ public class addAppointmentController implements Initializable {
             Appointment.addAppointment(appointment);
             toMain(actionEvent);
         }
+    }
+
+    public int getContactID(String contact) throws SQLException {
+        System.out.println(contact);
+        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        int contactID = 0;
+        while(rs.next()){
+            contactID = rs.getInt("Contact_ID");
+        }
+        return contactID;
     }
 
     public void toMain(ActionEvent actionEvent) throws IOException {

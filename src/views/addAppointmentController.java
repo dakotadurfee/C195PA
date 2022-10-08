@@ -222,15 +222,6 @@ public class addAppointmentController implements Initializable {
                 error = true;
             }
 
-            /*
-            if(LDTstart.isBefore(openTime) || LDTend.isAfter(closeTime)){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Selected time is outside of company hours: 8:00a.m. - 10:00p.m. EST");
-                alert.showAndWait();
-                error = true;
-            }
-             */
-
             if (LDTend.isBefore(LDTstart) || LDTend.isEqual(LDTstart)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("End time must be after start time");

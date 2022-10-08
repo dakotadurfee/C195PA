@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -45,11 +46,11 @@ public class ModifyAppointmentController implements Initializable {
         contactIDField.setText(Integer.toString(mAppointment.getContact()));
         customerIDField.setText(Integer.toString(mAppointment.getCustomerID()));
         userIDField.setText(Integer.toString(mAppointment.getUserID()));
-        startDateField.setPromptText(mAppointment.getStart().substring(0,10));
-        startTimeHours.setVisibleRow
-        startTimeMinutes.setPromptText(mAppointment.getStart().substring(15,16));
-        endTimeHours.setPromptText(mAppointment.getEnd().substring(12,13));
-        endTimeMinutes.setPromptText(mAppointment.getEnd().substring(15,16));
+        startDateField.setValue(LocalDate.of(Integer.parseInt(mAppointment.getStart().substring(0,4)), Integer.parseInt(mAppointment.getStart().substring(5,7)), Integer.parseInt(mAppointment.getStart().substring(8,10))));
+        startTimeHours.getValueFactory().setValue(Integer.parseInt(mAppointment.getStart().substring(12,13)));
+        startTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getStart().substring(14,16)));
+        endTimeHours.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(12,13)));
+        endTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(14,16)));
     }
 
     public void onSave(ActionEvent actionEvent) throws IOException {

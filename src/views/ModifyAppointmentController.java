@@ -1,6 +1,7 @@
 package views;
 
 import classes.Appointment;
+import helper.JDBC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,10 +13,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static views.mainMenuController.mAppointment;
@@ -38,7 +42,7 @@ public class ModifyAppointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        appointmentIDField.setText(Integer.toString(mAppointment.getCustomerID()));
+        appointmentIDField.setText(Integer.toString(mAppointment.getId()));
         titleField.setText(mAppointment.getTitle());
         descriptionField.setText(mAppointment.getDescription());
         locationField.setText(mAppointment.getLocation());
@@ -53,7 +57,7 @@ public class ModifyAppointmentController implements Initializable {
         endTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(14,16)));
     }
 
-    public void onSave(ActionEvent actionEvent) throws IOException {
+    public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         boolean error = false;
         boolean dateError = false;
         String title = null;
@@ -235,9 +239,10 @@ public class ModifyAppointmentController implements Initializable {
         }
 
         String lastUpdate = LocalDateTime.now().toString();
+        lastUpdate = lastUpdate.substring(0, lastUpdate.length() - 10);
+        lastUpdate = lastUpdate.replace('T', ' ');
 
-        int i = Appointment.getAllAppointments().size() - 1;
-        int dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
+        int appointmentID = Integer.parseInt(appointmentIDField.getText());
         if(error == false && dateError == false) {
             mAppointment.setCustomerID(customerID);
             mAppointment.setUserID(userID);
@@ -251,8 +256,51 @@ public class ModifyAppointmentController implements Initializable {
             mAppointment.setCreatedBy("Script");
             mAppointment.setLastUpdate(lastUpdate);
             mAppointment.setLastUpdateBy("Script");
+            modifyAppointmentDB(appointmentID, customerID, userID, title, description, location, contactID, type, start, end, "Script", lastUpdate, "Script");
             toMain(actionEvent);
         }
+    }
+
+    public void modifyAppointmentDB(int appointmentID, int customerID, int userID, String title, String description, String location, int contactID, String type, String start, String end, String createdBy,
+                                    String lastUpdate, String lastUpdatedBy) throws SQLException {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, " +
+                "Contact_ID = ? WHERE Appointment_ID = " + appointmentID;
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime userStart = LocalDateTime.parse(start, dt_formatter);
+        LocalDateTime userEnd = LocalDateTime.parse(end, dt_formatter);
+        LocalDateTime userLastUpdate = LocalDateTime.parse(lastUpdate, dt_formatter);
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId userZone = ZoneId.systemDefault();
+
+        ZonedDateTime userStartZDT = userStart.atZone(userZone);
+        ZonedDateTime userEndZDT = userEnd.atZone(userZone);
+        ZonedDateTime userLastUpdateZDT = userLastUpdate.atZone(userZone);
+
+        ZonedDateTime DBstartZDT = userStartZDT.withZoneSameInstant(utcZone);
+        ZonedDateTime DBendZDT = userEndZDT.withZoneSameInstant(utcZone);
+        ZonedDateTime DBlastUpdate = userLastUpdateZDT.withZoneSameInstant(utcZone);
+
+        start = DBstartZDT.toLocalDateTime().format(dt_formatter);
+        end = DBendZDT.toLocalDateTime().format(dt_formatter);
+        lastUpdate = DBlastUpdate.toLocalDateTime().format(dt_formatter);
+
+        ps.setString(1, title);
+        ps.setString(2, description);
+        ps.setString(3, location);
+        ps.setString(4, type);
+        ps.setString(5, start);
+        ps.setString(6, end);
+        ps.setString(7, createdBy);
+        ps.setString(8, lastUpdate);
+        ps.setString(9, lastUpdatedBy);
+        ps.setInt(10, customerID);
+        ps.setInt(11, userID);
+        ps.setInt(12, contactID);
+        ps.executeUpdate();
     }
 
     public void toMain(ActionEvent actionEvent) throws IOException {

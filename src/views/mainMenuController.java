@@ -275,7 +275,7 @@ public class mainMenuController implements Initializable {
         }
     }
 
-    public void deleteAppointment(ActionEvent actionEvent){
+    public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
         if(appointment == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -290,6 +290,12 @@ public class mainMenuController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK){
                 Appointment.deleteAppointment(appointment);
+
+                String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+                PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+                ps.setInt(1, appointment.getId());
+                ps.executeUpdate();
+
                 String appointmentID = String.valueOf(appointment.getId());
                 String appointmentType = appointment.getType();
                 Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -317,7 +323,7 @@ public class mainMenuController implements Initializable {
         }
     }
 
-    public void deleteCustomer(ActionEvent actionEvent) throws IOException {
+    public void deleteCustomer(ActionEvent actionEvent) throws IOException, SQLException {
         Customers customer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
         if(customer == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -343,7 +349,7 @@ public class mainMenuController implements Initializable {
         }
     }
 
-    public void deleteAppointments(ObservableList<Appointment> appointmentList){
+    public void deleteAppointments(ObservableList<Appointment> appointmentList) throws SQLException {
         for(int i = 0; i < appointmentList.size(); i++){
             Appointment.deleteAppointment(appointmentList.get(i));
         }

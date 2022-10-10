@@ -282,8 +282,55 @@ public class addAppointmentController implements Initializable {
         if (error == false && dateError == false) {
             Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
             Appointment.addAppointment(appointment);
+            addAppointmentDB(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
             toMain(actionEvent);
         }
+    }
+
+    public void addAppointmentDB(int appointmentID, int customerID, int userID, String title, String description, String location, int contactID, String type, String start, String end, String createDate,
+                                 String createdBy, String lastUpdate, String lastUpdateBy) throws SQLException {
+
+        String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime userStart = LocalDateTime.parse(start, dt_formatter);
+        LocalDateTime userEnd = LocalDateTime.parse(end, dt_formatter);
+        LocalDateTime userCreateDate = LocalDateTime.parse(createDate, dt_formatter);
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId userZone = ZoneId.systemDefault();
+
+        ZonedDateTime userStartZDT = userStart.atZone(userZone);
+        ZonedDateTime userEndZDT = userEnd.atZone(userZone);
+        ZonedDateTime userCreateDateZDT = userCreateDate.atZone(userZone);
+
+        ZonedDateTime DBstartZDT = userStartZDT.withZoneSameInstant(utcZone);
+        ZonedDateTime DBendZDT = userEndZDT.withZoneSameInstant(utcZone);
+        ZonedDateTime DBcreateDateZDT = userCreateDateZDT.withZoneSameInstant(utcZone);
+
+        start = DBstartZDT.toLocalDateTime().format(dt_formatter);
+        end = DBendZDT.toLocalDateTime().format(dt_formatter);
+        createDate = DBcreateDateZDT.toLocalDateTime().format(dt_formatter);
+        lastUpdate = createDate;
+
+        ps.setInt(1, appointmentID);
+        ps.setString(2,title);
+        ps.setString(3,description);
+        ps.setString(4,location);
+        ps.setString(5,type);
+        ps.setString(6,start);
+        ps.setString(7,end);
+        ps.setString(8,createDate);
+        ps.setString(9,createdBy);
+        ps.setString(10,lastUpdate);
+        ps.setString(11,lastUpdateBy);
+        ps.setInt(12,customerID);
+        ps.setInt(13,userID);
+        ps.setInt(14,contactID);
+        ps.executeUpdate();
     }
 
     public int getContactID(String contact) throws SQLException {

@@ -22,6 +22,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AddCustomerController implements Initializable {
@@ -121,10 +124,42 @@ public class AddCustomerController implements Initializable {
         if(error == false) {
             Customers customer = new Customers(customerID, customerName, address, postalCode, phone, createDate, "Script", lastUpdate, "Script", divisionID);
             Customers.addCustomer(customer);
+            addCustomerDB(customerID, customerName, address, postalCode, phone, createDate, lastUpdate, divisionID);
             toMain(actionEvent);
         }
+    }
 
+    public void addCustomerDB(int customerID, String customerName, String address, String postalCode, String phone, String createDate, String lastUpdate,
+                              int divisionID) throws SQLException {
+        String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, " +
+                "Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
+        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime userCreateDate = LocalDateTime.parse(createDate, dt_formatter);
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId userZone = ZoneId.systemDefault();
+
+        ZonedDateTime userCreateDateZDT = userCreateDate.atZone(userZone);
+
+        ZonedDateTime DBcreateDateZDT = userCreateDateZDT.withZoneSameInstant(utcZone);
+
+        createDate = DBcreateDateZDT.toLocalDateTime().format(dt_formatter);
+        lastUpdate = createDate;
+
+        ps.setInt(1, customerID);
+        ps.setString(2,customerName);
+        ps.setString(3, address);
+        ps.setString(4,postalCode);
+        ps.setString(5, phone);
+        ps.setString(6, createDate);
+        ps.setString(7, "script");
+        ps.setString(8, lastUpdate);
+        ps.setString(9, "script");
+        ps.setInt(10, divisionID);
+        ps.executeUpdate();
     }
 
     public void onCountrySelection(ActionEvent actionEvent) {

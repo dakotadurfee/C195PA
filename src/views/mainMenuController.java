@@ -22,6 +22,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Iterator;
 import java.util.Optional;
@@ -50,6 +53,7 @@ public class mainMenuController implements Initializable {
     public Button deleteAppointmentButton;
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
+
 
 
     @Override
@@ -345,6 +349,15 @@ public class mainMenuController implements Initializable {
                 }
                 deleteAppointments(appointmentList);
                 Customers.deleteCustomer(customer);
+
+                String sql = "DELETE FROM customers WHERE Customer_ID = ?";
+                PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+                ps.setInt(1, customer.getCustomerID());
+                ps.executeUpdate();
+
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText("Customer and customer's appointments successfully deleted");
+                a.showAndWait();
             }
         }
     }

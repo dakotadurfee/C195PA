@@ -19,6 +19,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static views.mainMenuController.mCustomer;
@@ -153,15 +156,40 @@ public class ModifyCustomerController implements Initializable {
             mCustomer.setPostalCode(postalCode);
             mCustomer.setPhone(phone);
             String lastUpdate = LocalDateTime.now().toString();
-            System.out.println(lastUpdate);
             lastUpdate = lastUpdate.substring(0, lastUpdate.length() - 10);
-            System.out.println(lastUpdate);
             lastUpdate = lastUpdate.replace('T', ' ');
-            System.out.println(lastUpdate);
             mCustomer.setLastUpdate(lastUpdate);
             mCustomer.setDivisionID(divisionID);
+            modifyCustomerDB(customerName, address, postalCode, phone, lastUpdate, divisionID);
             toMain(actionEvent);
         }
+    }
+
+    public void modifyCustomerDB(String customerName, String address, String postalCode, String phone, String lastUpdate, int divisionID) throws SQLException{
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Division_ID = ? " +
+                "WHERE Customer_ID = " + Integer.parseInt(customerIDField.getText());
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDateTime userLastUpdate = LocalDateTime.parse(lastUpdate,dt_formatter);
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId userZone = ZoneId.systemDefault();
+
+        ZonedDateTime userLastUpdateZDT = userLastUpdate.atZone(userZone);
+
+        ZonedDateTime DBlastUpdateZDT = userLastUpdateZDT.withZoneSameInstant(utcZone);
+
+        lastUpdate = DBlastUpdateZDT.toLocalDateTime().format(dt_formatter);
+
+        ps.setString(1, customerName);
+        ps.setString(2, address);
+        ps.setString(3, postalCode);
+        ps.setString(4, phone);
+        ps.setString(5, lastUpdate);
+        ps.setInt(6, divisionID);
+        ps.executeUpdate();
     }
 
     public void toMain(ActionEvent actionEvent) throws IOException {

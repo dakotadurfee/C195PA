@@ -5,9 +5,12 @@ import classes.CountryData;
 import classes.Customers;
 import helper.JDBC;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.sql.Date;
@@ -150,6 +153,47 @@ public class Main extends Application {
         while(rs.next()){
             String division = rs.getString("Division");
             CountryData.addCanadaDivision(division);
+        }
+    }
+
+    public static void upcomingAppointments(){
+        ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
+
+        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ZoneId utcZone = ZoneId.of("UTC");
+        ZoneId userZone = ZoneId.systemDefault();
+
+        LocalDateTime currentTime = LocalDateTime.now(utcZone);
+
+        for (Appointment appointment : Appointment.getAllAppointments()) {
+            LocalDateTime userAppointmentTime = LocalDateTime.parse(appointment.getStart(), dt_formatter);
+
+            ZonedDateTime userAppointmentTimeZDT = userAppointmentTime.atZone(userZone);
+
+            ZonedDateTime userAppointmentTimeUTC = userAppointmentTimeZDT.withZoneSameInstant(utcZone);
+
+            userAppointmentTime = userAppointmentTimeUTC.toLocalDateTime();
+
+            if ((userAppointmentTime.minusMinutes(15).isEqual(currentTime) || userAppointmentTime.minusMinutes(15).isBefore(currentTime)
+                    && userAppointmentTime.isAfter(currentTime))) {
+                upcomingAppointments.add(appointment);
+            }
+        }
+
+        if (upcomingAppointments.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointments");
+            alert.setContentText("There are no upcoming appointments");
+            alert.showAndWait();
+        } else {
+            for (Appointment appointment : upcomingAppointments) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointments");
+                alert.setContentText("Upcoming appointment:\n Appointment ID: " + appointment.getId() + "\n Start: " + appointment.getStart() + "\n " +
+                        "End: " + appointment.getEnd());
+                alert.showAndWait();
+            }
         }
     }
 }

@@ -53,6 +53,7 @@ public class mainMenuController implements Initializable {
     public Button deleteAppointmentButton;
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
+    private static boolean called = false;
 
 
 
@@ -74,7 +75,50 @@ public class mainMenuController implements Initializable {
         addCustomer.setVisible(false);
         modifyCustomerButton.setVisible(false);
         deleteCustomerButton.setVisible(false);
+
+        if(!called) {
+            ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
+
+            DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            ZoneId utcZone = ZoneId.of("UTC");
+            ZoneId userZone = ZoneId.systemDefault();
+
+            LocalDateTime currentTime = LocalDateTime.now(utcZone);
+
+            for (Appointment appointment : Appointment.getAllAppointments()) {
+                LocalDateTime userAppointmentTime = LocalDateTime.parse(appointment.getStart(), dt_formatter);
+
+                ZonedDateTime userAppointmentTimeZDT = userAppointmentTime.atZone(userZone);
+
+                ZonedDateTime userAppointmentTimeUTC = userAppointmentTimeZDT.withZoneSameInstant(utcZone);
+
+                userAppointmentTime = userAppointmentTimeUTC.toLocalDateTime();
+
+                if ((userAppointmentTime.minusMinutes(15).isEqual(currentTime) || userAppointmentTime.minusMinutes(15).isBefore(currentTime)
+                        && userAppointmentTime.isAfter(currentTime))) {
+                    upcomingAppointments.add(appointment);
+                }
+            }
+
+            if (upcomingAppointments.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointments");
+                alert.setContentText("There are no upcoming appointments");
+                alert.showAndWait();
+            } else {
+                for (Appointment appointment : upcomingAppointments) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Upcoming Appointments");
+                    alert.setContentText("Upcoming appointment:\n Appointment ID: " + appointment.getId() + "\n Start: " + appointment.getStart() + "\n " +
+                            "End: " + appointment.getEnd());
+                    alert.showAndWait();
+                }
+            }
+            called = true;
+        }
     }
+
     
     public void addAppointment(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/addAppointment.fxml"));
@@ -366,5 +410,14 @@ public class mainMenuController implements Initializable {
         for(int i = 0; i < appointmentList.size(); i++){
             Appointment.deleteAppointment(appointmentList.get(i));
         }
+    }
+
+    public void toReports(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/views/Reports.fxml"));
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 1449, 400);
+        stage.setTitle("Reports");
+        stage.setScene(scene);
+        stage.show();
     }
 }

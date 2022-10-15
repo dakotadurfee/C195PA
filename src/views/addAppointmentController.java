@@ -334,7 +334,6 @@ public class addAppointmentController implements Initializable {
     }
 
     public int getContactID(String contact) throws SQLException {
-        System.out.println(contact);
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();

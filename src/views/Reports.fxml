@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="1449.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ReportsController">
+   <children>
+      <TableView fx:id="reportsTable" layoutX="11.0" layoutY="115.0" prefHeight="200.0" prefWidth="1396.0">
+        <columns>
+          <TableColumn fx:id="firstCol" prefWidth="91.0" text="Appt ID" />
+          <TableColumn fx:id="secondCol" prefWidth="115.0" text="Title" />
+            <TableColumn fx:id="thirdCol" prefWidth="115.0" text="Type" />
+            <TableColumn fx:id="fourthCol" prefWidth="120.0" text="Description" />
+            <TableColumn fx:id="fifthCol" prefWidth="131.0" text="Start" />
+            <TableColumn fx:id="sixthCol" prefWidth="166.0" text="End" />
+            <TableColumn fx:id="seventhCol" prefWidth="142.0" text="CustomerID" />
+            <TableColumn fx:id="eighthCol" prefWidth="197.0" />
+            <TableColumn fx:id="ninthCol" prefWidth="124.0" />
+            <TableColumn fx:id="tenthCol" prefWidth="73.0" />
+            <TableColumn fx:id="eleventhCol" prefWidth="75.0" />
+            <TableColumn fx:id="twelfthCol" prefWidth="46.0" />
+        </columns>
+      </TableView>
+      <RadioButton layoutX="26.0" layoutY="24.0" mnemonicParsing="false" onAction="#onContactAppointments" selected="true" text="Contact Schedule">
+         <toggleGroup>
+            <ToggleGroup fx:id="schedules" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="202.0" layoutY="24.0" mnemonicParsing="false" onAction="#onTypeAppointments" text="Type Appointments" toggleGroup="$schedules" />
+      <RadioButton layoutX="393.0" layoutY="24.0" mnemonicParsing="false" onAction="#onMonthlyAppointments" text="Monthly Appointments" toggleGroup="$schedules" />
+      <ComboBox fx:id="contactsPicker" layoutX="634.0" layoutY="74.0" onAction="#onContactSelection" prefWidth="150.0" />
+      <Button layoutX="1330.0" layoutY="339.0" mnemonicParsing="false" onAction="#toMain" text="Main Menu" />
+      <ComboBox fx:id="typesPicker" layoutX="634.0" layoutY="74.0" onAction="#onTypeSelection" prefWidth="150.0" />
+      <ComboBox fx:id="monthsPicker" layoutX="634.0" layoutY="74.0" onAction="#onMonthlySelection" prefWidth="150.0" />
+   </children>
+</AnchorPane>

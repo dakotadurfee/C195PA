@@ -1,0 +1,12 @@
+
+User log-in Attempt: 
+Date: 2022-10-16 15:04:00
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-16 15:04
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-16 15:04:35
+Successful

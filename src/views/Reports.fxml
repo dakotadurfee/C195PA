@@ -32,5 +32,7 @@
       <Button layoutX="1330.0" layoutY="339.0" mnemonicParsing="false" onAction="#toMain" text="Main Menu" />
       <ComboBox fx:id="typesPicker" layoutX="634.0" layoutY="74.0" onAction="#onTypeSelection" prefWidth="150.0" />
       <ComboBox fx:id="monthsPicker" layoutX="634.0" layoutY="74.0" onAction="#onMonthlySelection" prefWidth="150.0" />
+      <RadioButton layoutX="601.0" layoutY="24.0" mnemonicParsing="false" onAction="#onCustomerAppointments" text="Customer Appointments" toggleGroup="$schedules" />
+      <ComboBox fx:id="customerPicker" layoutX="634.0" layoutY="74.0" onAction="#onCustomerSelection" prefWidth="150.0" />
    </children>
 </AnchorPane>

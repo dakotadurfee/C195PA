@@ -45,6 +45,7 @@ public class ReportsController implements Initializable {
     public ComboBox contactsPicker;
     public ComboBox typesPicker;
     public ComboBox monthsPicker;
+    public ComboBox customerPicker;
     private ObservableList<Appointment> emptyList = FXCollections.observableArrayList();
 
 
@@ -59,6 +60,7 @@ public class ReportsController implements Initializable {
         seventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         typesPicker.setVisible(false);
         monthsPicker.setVisible(false);
+        customerPicker.setVisible(false);
 
 
         String sql = "SELECT Contact_Name FROM contacts";
@@ -99,6 +101,7 @@ public class ReportsController implements Initializable {
         contactsPicker.setVisible(true);
         typesPicker.setVisible(false);
         monthsPicker.setVisible(false);
+        customerPicker.setVisible(false);
         reportsTable.setItems(emptyList);
 
 
@@ -169,6 +172,7 @@ public class ReportsController implements Initializable {
         contactsPicker.setVisible(false);
         typesPicker.setVisible(true);
         monthsPicker.setVisible(false);
+        customerPicker.setVisible(false);
         reportsTable.setItems(emptyList);
 
         String sql = "SELECT Type FROM appointments";
@@ -221,6 +225,7 @@ public class ReportsController implements Initializable {
         contactsPicker.setVisible(false);
         typesPicker.setVisible(false);
         monthsPicker.setVisible(true);
+        customerPicker.setVisible(false);
         reportsTable.setItems(emptyList);
 
         monthsPicker.setItems(getMonths());
@@ -253,6 +258,60 @@ public class ReportsController implements Initializable {
         months.add("11");
         months.add("12");
         return months;
+    }
+
+    public void onCustomerAppointments(ActionEvent actionEvent) throws SQLException {
+        firstCol.setText("Appt ID");
+        secondCol.setText("Title");
+        thirdCol.setText("Description");
+        fourthCol.setText("Location");
+        fifthCol.setText("Contact");
+        sixthCol.setText("Type");
+        seventhCol.setText("Start Time");
+        eighthCol.setText("End Time");
+        ninthCol.setText("Start Date");
+        tenthCol.setText("Created By");
+        eleventhCol.setText("Customer ID");
+        twelfthCol.setText("User ID");
+
+        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        contactsPicker.setVisible(false);
+        typesPicker.setVisible(false);
+        monthsPicker.setVisible(false);
+        customerPicker.setVisible(true);
+        reportsTable.setItems(emptyList);
+
+        String sql = "SELECT Customer_ID FROM customers";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        ObservableList<Integer> customers = FXCollections.observableArrayList();
+        while(rs.next()){
+            int customerID = rs.getInt("Customer_ID");
+            customers.add(customerID);
+        }
+        customerPicker.setItems(customers);
+    }
+
+    public void onCustomerSelection(ActionEvent actionEvent){
+        int customer = (Integer)customerPicker.getSelectionModel().getSelectedItem();
+        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
+        for(Appointment appointment : Appointment.getAllAppointments()){
+            if(appointment.getCustomerID() == customer){
+                customerAppointments.add(appointment);
+            }
+        }
+        reportsTable.setItems(customerAppointments);
     }
 
     public void toMain(ActionEvent actionEvent) throws IOException {

@@ -4,6 +4,7 @@ import classes.Appointment;
 import classes.CountryData;
 import classes.Customers;
 import helper.JDBC;
+import helper.TimeConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -135,19 +136,8 @@ public class AddCustomerController implements Initializable {
                 "Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime userCreateDate = LocalDateTime.parse(createDate, dt_formatter);
-
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId userZone = ZoneId.systemDefault();
-
-        ZonedDateTime userCreateDateZDT = userCreateDate.atZone(userZone);
-
-        ZonedDateTime DBcreateDateZDT = userCreateDateZDT.withZoneSameInstant(utcZone);
-
-        createDate = DBcreateDateZDT.toLocalDateTime().format(dt_formatter);
-        lastUpdate = createDate;
+        createDate = TimeConverter.toUTCTime(createDate);
+        lastUpdate = TimeConverter.toUTCTime(lastUpdate);
 
         ps.setInt(1, customerID);
         ps.setString(2,customerName);

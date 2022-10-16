@@ -2,6 +2,7 @@ package views;
 
 import classes.CountryData;
 import helper.JDBC;
+import helper.TimeConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -170,18 +171,7 @@ public class ModifyCustomerController implements Initializable {
                 "WHERE Customer_ID = " + Integer.parseInt(customerIDField.getText());
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime userLastUpdate = LocalDateTime.parse(lastUpdate,dt_formatter);
-
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId userZone = ZoneId.systemDefault();
-
-        ZonedDateTime userLastUpdateZDT = userLastUpdate.atZone(userZone);
-
-        ZonedDateTime DBlastUpdateZDT = userLastUpdateZDT.withZoneSameInstant(utcZone);
-
-        lastUpdate = DBlastUpdateZDT.toLocalDateTime().format(dt_formatter);
+        lastUpdate = TimeConverter.toUTCTime(lastUpdate);
 
         ps.setString(1, customerName);
         ps.setString(2, address);

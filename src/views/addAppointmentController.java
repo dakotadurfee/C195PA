@@ -3,6 +3,8 @@ package views;
 import classes.Appointment;
 import classes.Customers;
 import helper.JDBC;
+import helper.LDTtoStringInterface;
+import helper.TimeConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,10 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.converter.LocalTimeStringConverter;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,6 +81,7 @@ public class addAppointmentController implements Initializable {
         String description = null;
         String location = null;
         String contact = null;
+        String createDate = LocalDateTime.now().toString();
         int contactID = 0;
         String type = null;
         if (titleField.getText().equals("")) {
@@ -267,9 +268,7 @@ public class addAppointmentController implements Initializable {
             }
         }
 
-        String createDate = LocalDateTime.now().toString();
-        createDate = createDate.substring(0,createDate.length() - 10);
-        createDate = createDate.replace('T', ' ');
+        createDate = TimeConverter.toReadableString(createDate);
         String lastUpdate = createDate;
 
         int i = Appointment.getAllAppointments().size() - 1;
@@ -294,26 +293,11 @@ public class addAppointmentController implements Initializable {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        LocalDateTime userStart = LocalDateTime.parse(start, dt_formatter);
-        LocalDateTime userEnd = LocalDateTime.parse(end, dt_formatter);
-        LocalDateTime userCreateDate = LocalDateTime.parse(createDate, dt_formatter);
 
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId userZone = ZoneId.systemDefault();
-
-        ZonedDateTime userStartZDT = userStart.atZone(userZone);
-        ZonedDateTime userEndZDT = userEnd.atZone(userZone);
-        ZonedDateTime userCreateDateZDT = userCreateDate.atZone(userZone);
-
-        ZonedDateTime DBstartZDT = userStartZDT.withZoneSameInstant(utcZone);
-        ZonedDateTime DBendZDT = userEndZDT.withZoneSameInstant(utcZone);
-        ZonedDateTime DBcreateDateZDT = userCreateDateZDT.withZoneSameInstant(utcZone);
-
-        start = DBstartZDT.toLocalDateTime().format(dt_formatter);
-        end = DBendZDT.toLocalDateTime().format(dt_formatter);
-        createDate = DBcreateDateZDT.toLocalDateTime().format(dt_formatter);
+        start = TimeConverter.toUTCTime(start);
+        end = TimeConverter.toUTCTime(end);
+        createDate = TimeConverter.toUTCTime(createDate);
         lastUpdate = createDate;
 
         ps.setInt(1, appointmentID);

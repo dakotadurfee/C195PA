@@ -1,5 +1,6 @@
 package views;
 
+import helper.TimeConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,8 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -42,6 +46,8 @@ public class loginController implements Initializable {
     public void setLoginbutton(ActionEvent actionEvent) throws IOException {
         String usern = usernameField.getText();
         String passw = passwordField.getText();
+        boolean correct = false;
+
         /*
         if(usern.equals("sqlUser") && passw.equals("Passw0rd!")){
             Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
@@ -50,6 +56,7 @@ public class loginController implements Initializable {
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
+            correct = true;
         }
         else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -57,13 +64,34 @@ public class loginController implements Initializable {
             alert.setContentText("Username or password are incorrect");
             alert.showAndWait();
         }
+
+        FileWriter fwWriter = new FileWriter("login_activity.txt", true);
+        PrintWriter outputFile = new PrintWriter(fwWriter);
+
+        String date = LocalDateTime.now().toString();
+        date = TimeConverter.toReadableString(date);
+
+        outputFile.println("\nUser log-in Attempt: \nDate: " + date);
+        if(!correct){
+            outputFile.println("Unsuccessful");
+        }
+        else{
+            outputFile.println("Successful");
+        }
+
+        outputFile.close();
         */
+
+
+
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1449, 400);
         stage.setTitle("Main Menu");
         stage.setScene(scene);
         stage.show();
+
+
     }
 }
 

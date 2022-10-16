@@ -2,6 +2,7 @@ package views;
 
 import classes.Appointment;
 import helper.JDBC;
+import helper.TimeConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -239,8 +240,7 @@ public class ModifyAppointmentController implements Initializable {
         }
 
         String lastUpdate = LocalDateTime.now().toString();
-        lastUpdate = lastUpdate.substring(0, lastUpdate.length() - 10);
-        lastUpdate = lastUpdate.replace('T', ' ');
+        lastUpdate = TimeConverter.toReadableString(lastUpdate);
 
         int appointmentID = Integer.parseInt(appointmentIDField.getText());
         if(error == false && dateError == false) {
@@ -267,26 +267,9 @@ public class ModifyAppointmentController implements Initializable {
                 "Contact_ID = ? WHERE Appointment_ID = " + appointmentID;
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime userStart = LocalDateTime.parse(start, dt_formatter);
-        LocalDateTime userEnd = LocalDateTime.parse(end, dt_formatter);
-        LocalDateTime userLastUpdate = LocalDateTime.parse(lastUpdate, dt_formatter);
-
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId userZone = ZoneId.systemDefault();
-
-        ZonedDateTime userStartZDT = userStart.atZone(userZone);
-        ZonedDateTime userEndZDT = userEnd.atZone(userZone);
-        ZonedDateTime userLastUpdateZDT = userLastUpdate.atZone(userZone);
-
-        ZonedDateTime DBstartZDT = userStartZDT.withZoneSameInstant(utcZone);
-        ZonedDateTime DBendZDT = userEndZDT.withZoneSameInstant(utcZone);
-        ZonedDateTime DBlastUpdate = userLastUpdateZDT.withZoneSameInstant(utcZone);
-
-        start = DBstartZDT.toLocalDateTime().format(dt_formatter);
-        end = DBendZDT.toLocalDateTime().format(dt_formatter);
-        lastUpdate = DBlastUpdate.toLocalDateTime().format(dt_formatter);
+        start = TimeConverter.toUTCTime(start);
+        end = TimeConverter.toUTCTime(end);
+        lastUpdate = TimeConverter.toUTCTime(lastUpdate);
 
         ps.setString(1, title);
         ps.setString(2, description);

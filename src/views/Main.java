@@ -13,11 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -42,6 +40,7 @@ public class Main extends Application {
         addUSDivisions();
         addUKDivisions();
         addCanadaDivisions();
+
         launch(args);
         JDBC.closeConnection();
     }

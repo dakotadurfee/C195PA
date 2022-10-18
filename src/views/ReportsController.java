@@ -2,7 +2,6 @@ package views;
 
 import classes.Appointment;
 import classes.Customers;
-import classes.ReportsData;
 import helper.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

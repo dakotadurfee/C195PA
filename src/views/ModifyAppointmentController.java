@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 import static views.mainMenuController.mAppointment;
 
+/**This class controls the modify appointment page in the user interface.*/
 public class ModifyAppointmentController implements Initializable {
     public TextField appointmentIDField;
     public TextField titleField;
@@ -41,6 +42,7 @@ public class ModifyAppointmentController implements Initializable {
     public Spinner endTimeMinutes;
     public Button saveButton;
 
+    /**This method sets the values of the fields to the information from the user selected appointment.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentIDField.setText(Integer.toString(mAppointment.getId()));
@@ -58,6 +60,9 @@ public class ModifyAppointmentController implements Initializable {
         endTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(14,16)));
     }
 
+    /**This method saves all the user entered information for the selected appointment. It uses error checking to see if there are any blank fields or if there are characers in fields that require integers. It also checks
+     * to see if there are any overlapping appointments and if the user entered time is within company hours. If there are any errors it will display a message saying what the error is and will not save the information.
+     * @param actionEvent method is called when the user presses the save button.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         boolean error = false;
         boolean dateError = false;
@@ -261,6 +266,7 @@ public class ModifyAppointmentController implements Initializable {
         }
     }
 
+    /**This method is called at the end of the onSave method and takes all the variables needed for the database and updates all the information for the selected appointment.*/
     public void modifyAppointmentDB(int appointmentID, int customerID, int userID, String title, String description, String location, int contactID, String type, String start, String end, String createdBy,
                                     String lastUpdate, String lastUpdatedBy) throws SQLException {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, " +
@@ -286,6 +292,8 @@ public class ModifyAppointmentController implements Initializable {
         ps.executeUpdate();
     }
 
+    /**This method takes the user back the main menu of the application.
+     * @param actionEvent method is called at the end of the onSave method if there are no errors or if the user clicks the cancel button.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

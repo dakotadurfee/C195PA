@@ -56,8 +56,8 @@ public class AddCustomerController implements Initializable {
     }
 
     /**This method is called when the save button is clicked. It creates a new customer object and adds it to the all customers list and the database if
-     * there are no errors. It uses error checking to see if there are any blank fields or if there are characters in fields that require integers. If there
-     * are any errors an error message will be displayed saying what the error is, and it will not save any of the information.*/
+     * there are no errors. It uses error checking to see if there are any blank fields. If there are any errors an error message will be displayed saying what the error is,
+     * and it will not save any of the information.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         boolean error = false;
         int customerID = Integer.parseInt(customerIDField.getText());

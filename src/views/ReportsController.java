@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**This method controls the reports page in the user interface.*/
 public class ReportsController implements Initializable {
 
     public TableColumn firstCol;
@@ -47,7 +48,7 @@ public class ReportsController implements Initializable {
     public ComboBox customerPicker;
     private ObservableList<Appointment> emptyList = FXCollections.observableArrayList();
 
-
+    /**This method is called when the reports page is loaded and sets the items for the contacts field with all the contacts from the database.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -77,6 +78,9 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**This method changes the table to display the information for the appointments by contact. It also sets the items for the contacts field with all the contacts
+     * from the database.
+     * @param actionEvent method is called when the user selects the contact schedule radio button.*/
     public void onContactAppointments(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -119,6 +123,8 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**This method fills the table with appointments under the selected contact.
+     * @param actionEvent method is called once the user selects a contact from the combo box.*/
     public void onContactSelection(ActionEvent actionEvent){
         String contact = (String)contactsPicker.getSelectionModel().getSelectedItem();
         int contactID = 0;
@@ -142,6 +148,9 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**This method changes the table to display the information for the appointments by type. It also sets the items for the types field with all the types
+     * from the database.
+     * @param actionEvent method is called when the user selects the type appointments radio button.*/
     public void onTypeAppointments(ActionEvent actionEvent) throws SQLException {
         firstCol.setText("Appt ID");
         secondCol.setText("Title");

@@ -18,7 +18,7 @@
       <TextField fx:id="phoneField" layoutX="162.0" layoutY="191.0" />
       <ComboBox fx:id="countryField" layoutX="162.0" layoutY="229.0" onAction="#onCountrySelection" prefWidth="150.0" />
       <Label layoutX="346.0" layoutY="233.0" text="Division" />
-      <ComboBox fx:id="divisionField" layoutX="409.0" layoutY="229.0" prefWidth="150.0" />
+      <ComboBox fx:id="divisionField" layoutX="409.0" layoutY="229.0" onAction="#getDivision" prefWidth="150.0" />
       <Button layoutX="409.0" layoutY="283.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
       <Button layoutX="513.0" layoutY="283.0" mnemonicParsing="false" onAction="#toMain" text="Cancel" />
    </children>

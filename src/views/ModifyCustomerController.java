@@ -27,6 +27,7 @@ import java.util.ResourceBundle;
 
 import static views.mainMenuController.mCustomer;
 
+/**This class controls the modify customer page in the user interface.*/
 public class ModifyCustomerController implements Initializable {
     public TextField customerIDField;
     public TextField customerNameField;
@@ -36,6 +37,7 @@ public class ModifyCustomerController implements Initializable {
     public ComboBox countryField;
     public ComboBox divisionField;
 
+    /**This method sets the values of the fields to the information from the user selected customer.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerIDField.setText(Integer.toString(mCustomer.getCustomerID()));
@@ -52,6 +54,9 @@ public class ModifyCustomerController implements Initializable {
         else{
             countryField.setPromptText("Canada");
         }
+
+        countryField.setItems(CountryData.getCountryList());
+
         try {
             getDivision();
         } catch (SQLException e) {
@@ -61,6 +66,8 @@ public class ModifyCustomerController implements Initializable {
         countryField.setItems(CountryData.getCountryList());
     }
 
+    /**This method fills the division field with all available divisions from the customers country.
+     * @param actionEvent method is called once the user*/
     public void onCountrySelection(ActionEvent actionEvent) {
         String country = (String)countryField.getSelectionModel().getSelectedItem();
         if(country.equals("U.S")){
@@ -74,6 +81,7 @@ public class ModifyCustomerController implements Initializable {
         }
     }
 
+    /**This method gets the division name from the database based off the selected customer's division ID and sets the division field's value to that name.*/
     public void getDivision() throws SQLException {
         String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = " + Integer.toString(mCustomer.getDivisionID());
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -85,6 +93,9 @@ public class ModifyCustomerController implements Initializable {
         }
     }
 
+    /**This method saves all the user entered information for the selected customer. It uses error checking to see if there are any blank fields. If there
+     * are any errors an error message will display saying what the error is and the information will not be saved.
+     * @param actionEvent method is called when the user presses the save button.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException{
         boolean error = false;
         int customerID = Integer.parseInt(customerIDField.getText());
@@ -166,6 +177,7 @@ public class ModifyCustomerController implements Initializable {
         }
     }
 
+    /**This method is called at the end of the onSave method and takes all the variables needed for the database and updates the information for the selected customer.*/
     public void modifyCustomerDB(String customerName, String address, String postalCode, String phone, String lastUpdate, int divisionID) throws SQLException{
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Division_ID = ? " +
                 "WHERE Customer_ID = " + Integer.parseInt(customerIDField.getText());
@@ -182,6 +194,8 @@ public class ModifyCustomerController implements Initializable {
         ps.executeUpdate();
     }
 
+    /**This method takes the user to the main menu.
+     * @param actionEvent method is called at the end of the onSave method or if the user presses the cancel button.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

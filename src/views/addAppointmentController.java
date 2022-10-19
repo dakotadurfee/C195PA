@@ -25,7 +25,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-
+/**This class controls the add appointment page in the user interface.*/
 public class addAppointmentController implements Initializable {
     public TextField appointmentIDField;
     public TextField titleField;
@@ -44,6 +44,8 @@ public class addAppointmentController implements Initializable {
     public Spinner endTimeMinutes;
     public ComboBox contactField;
 
+    /**This method fills the appointment id field with an auto generated value that is one higher than the highest appointment ID value and fills the
+     * contact field with all the names from the contacts table in the database.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int dynamicID = 0;
@@ -73,6 +75,11 @@ public class addAppointmentController implements Initializable {
 
     }
 
+    /**This method creates a new appointment object and adds it to the all appointments list and the database if there are no errors. It uses error checking to see
+     * if there are any blank fields or if there are characters in fields that require integers. It also checks to see if there are any overlapping appointments
+     * and if the user entered time is within company hours. If there are any errors it will display a message saying what the error is and will not save the
+     * information.
+     * @param actionEvent method is called when the save button is clicked.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         int dynamicID = 0;
         boolean error = false;
@@ -286,6 +293,7 @@ public class addAppointmentController implements Initializable {
         }
     }
 
+    /**This method is called at the end of the onSave method and takes all the variables needed for the database and adds an appointment to the appointments table.*/
     public void addAppointmentDB(int appointmentID, int customerID, int userID, String title, String description, String location, int contactID, String type, String start, String end, String createDate,
                                  String createdBy, String lastUpdate, String lastUpdateBy) throws SQLException {
 
@@ -317,6 +325,10 @@ public class addAppointmentController implements Initializable {
         ps.executeUpdate();
     }
 
+    /**The getContactID method is called from the onSave method where the user selects a contact name from a combo box and this method returns the contact ID
+     * for that contact name.
+     * @param contact takes in a string and searches for that name in the database and assigns the contact ID for the name to the contactID variable.
+     * @return returns the contact ID of the contact name that was taken in as a parameter.*/
     public int getContactID(String contact) throws SQLException {
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -329,6 +341,7 @@ public class addAppointmentController implements Initializable {
         return contactID;
     }
 
+    /**This */
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

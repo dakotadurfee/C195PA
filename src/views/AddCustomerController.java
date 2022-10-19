@@ -28,6 +28,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**This class controls the add customer page in the user interface.*/
 public class AddCustomerController implements Initializable {
     public TextField customerIDField;
     public TextField customerNameField;
@@ -38,6 +39,8 @@ public class AddCustomerController implements Initializable {
     public ComboBox divisionField;
     public Button saveButton;
 
+    /**This method fills the customer ID field with an auto generated value that is one higher than the highest customer ID value and fills the country field
+     * with all available country options.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int i = Customers.getAllCustomers().size() - 1;
@@ -52,6 +55,9 @@ public class AddCustomerController implements Initializable {
         countryField.setItems(CountryData.getCountryList());
     }
 
+    /**This method is called when the save button is clicked. It creates a new customer object and adds it to the all customers list and the database if
+     * there are no errors. It uses error checking to see if there are any blank fields or if there are characters in fields that require integers. If there
+     * are any errors an error message will be displayed saying what the error is, and it will not save any of the information.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
         boolean error = false;
         int customerID = Integer.parseInt(customerIDField.getText());
@@ -130,6 +136,7 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /**This method is called at the end of the onSave method and takes all the variables needed for the database and adds a customer to the customers table.*/
     public void addCustomerDB(int customerID, String customerName, String address, String postalCode, String phone, String createDate, String lastUpdate,
                               int divisionID) throws SQLException {
         String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, " +
@@ -152,6 +159,8 @@ public class AddCustomerController implements Initializable {
         ps.executeUpdate();
     }
 
+    /**This method is called when a user selects a country, and it fills the division field with divisions from the selected country. It gets the division data
+     * from the CountryData class. */
     public void onCountrySelection(ActionEvent actionEvent) {
         String country = (String)countryField.getSelectionModel().getSelectedItem();
         if(country.equals("U.S")){
@@ -165,6 +174,7 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /**This method is called the end of the onSave method if there are no errors or if the cancel button is clicked, and it takes the user back to the main menu.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

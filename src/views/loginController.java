@@ -32,6 +32,8 @@ public class loginController implements Initializable {
     public Label language;
     public Label timeZone;
 
+    /**This method checks to see what language and time zone the user's computer is using. It translates all the words in the application to the user's language and
+     * displays what time zone they are in.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Locale locale = Locale.getDefault();
@@ -43,6 +45,9 @@ public class loginController implements Initializable {
         timeZone.setText(zone.getDisplayName());
     }
 
+    /**This method checks to see if the user's login information is valid. If the credentials are valid then it takes the user to the main menu of the application.
+     * If the login information is incorrect an error message will be displayed. The method logs the date and time for every login attempt and if the login attempt
+     * was successful. It saves that information to a login_activity.txt file.*/
     public void setLoginbutton(ActionEvent actionEvent) throws IOException {
         String usern = usernameField.getText();
         String passw = passwordField.getText();

@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**This class controls the main menu of the application.*/
 public class mainMenuController implements Initializable {
     public ToggleGroup appointments;
     public TableView appointmentsTable;
@@ -55,8 +56,9 @@ public class mainMenuController implements Initializable {
     public Button deleteCustomerButton;
     private static boolean called = false;
 
-
-
+    /**This method is called every time the user is sent to the main menu and populates the table with all the scheduled appointments. The first time it is called
+     * it displays a message saying if there are any upcoming appointments or not. It does not indicate if there are upcoming appointments after the first time the
+     * method is called.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -119,7 +121,8 @@ public class mainMenuController implements Initializable {
         }
     }
 
-    
+    /**This method is called when the user clicks the add appointment button, and it takes the user to the add appointment page.
+     * @param actionEvent method is called when the user presses the add appointment button.*/
     public void addAppointment(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/addAppointment.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -129,6 +132,8 @@ public class mainMenuController implements Initializable {
         stage.show();
     }
 
+    /**This method is called when the suer clicks the add customer button, and it takes the user to the add customer page.
+     * @param actionEvent method is called when the user presses the add customer button.*/
     public void addCustomer(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/AddCustomer.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -137,6 +142,9 @@ public class mainMenuController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**This method is called when the user clicks the customers radio button, and it changes the table to display all the customers.
+     * @param actionEvent method is called when the user presses the customers radio button.*/
     public void viewCustomers(ActionEvent actionEvent) {
         firstCol.setText("Customer_ID");
         secondCol.setText("Customer_Name");
@@ -172,6 +180,8 @@ public class mainMenuController implements Initializable {
         deleteAppointmentButton.setVisible(false);
     }
 
+    /**This method is called when the user selects the monthly radio button, and it displays all the appointments that are in the current month.
+     * @param actionEvent method is called when the user presses the monthly radio button.*/
     public void onMonthly(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -217,6 +227,8 @@ public class mainMenuController implements Initializable {
         deleteAppointmentButton.setVisible(true);
     }
 
+    /**This method is called when the user selects the weekly radio button, and it displays all the appointments that are in the current week.
+     * @param actionEvent method is called when the user presses the weekly radio button.*/
     public void onWeekly(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -267,6 +279,8 @@ public class mainMenuController implements Initializable {
         deleteAppointmentButton.setVisible(true);
     }
 
+    /**This method is called when the user selects the all appointments radio button, and it displays all the scheduled appointments.
+     * @param actionEvent method is called when the user presses the all appointments radio button.*/
     public void onAll(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -303,7 +317,9 @@ public class mainMenuController implements Initializable {
 
     }
 
-
+    /**This method takes the user to the modify appointment page if the user selected an appointment and displays an error message if the user did not select an
+     * appointment.
+     * @param actionEvent method is called when the user presses the modify appointment button. */
     public void modifyAppointment(ActionEvent actionEvent) throws IOException {
 
         mAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
@@ -323,6 +339,9 @@ public class mainMenuController implements Initializable {
         }
     }
 
+    /**This method deletes an appointment from the all appointments list and from the database if the user selected an appointment. The method displays an error
+     * message if the user did not select an appointment. It also displays a confirmation message.
+     * @param actionEvent method is called when the user presses the delete appointment button.*/
     public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
         if(appointment == null){
@@ -353,6 +372,8 @@ public class mainMenuController implements Initializable {
         }
     }
 
+    /**This method takes the user to the modify customer page if the user selected a customer and displays an error message if the user did not select a customer.
+     * @param actionEvent method is called when the user presses the modify customer button.*/
     public void modifyCustomer(ActionEvent actionEvent) throws IOException {
         mCustomer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
         if(mCustomer == null){
@@ -371,6 +392,9 @@ public class mainMenuController implements Initializable {
         }
     }
 
+    /**This method deletes a customer and any appointments the customer has if the user selects a customer. An error message is displayed if the user did not select
+     * a customer. It also displays a confirmation message.
+     * @param actionEvent method is called when the user presses the delete customer button.*/
     public void deleteCustomer(ActionEvent actionEvent) throws IOException, SQLException {
         Customers customer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
         if(customer == null){
@@ -406,12 +430,15 @@ public class mainMenuController implements Initializable {
         }
     }
 
+    /**This method deletes all the appointments a customer has before the customer is deleted.
+     * @param appointmentList method takes in a list holding all the appointments a customer has and deletes each of those appointments.*/
     public void deleteAppointments(ObservableList<Appointment> appointmentList) throws SQLException {
         for(int i = 0; i < appointmentList.size(); i++){
             Appointment.deleteAppointment(appointmentList.get(i));
         }
     }
 
+    /**This method takes the user to the reports page of the application and is called when the user presses the reports button from the main menu.*/
     public void toReports(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/Reports.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

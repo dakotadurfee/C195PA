@@ -75,8 +75,8 @@ public class addAppointmentController implements Initializable {
 
     }
 
-    /**This method creates a new appointment object and adds it to the all appointments list and the database if there are no errors. It uses error checking to see
-     * if there are any blank fields or if there are characters in fields that require integers. It also checks to see if there are any overlapping appointments
+    /**This method is called when the save button is clicked in the user interface. It creates a new appointment object and adds it to the all appointments list and the database if there are no errors.
+     * It uses error checking to see if there are any blank fields or if there are characters in fields that require integers. It also checks to see if there are any overlapping appointments.
      * and if the user entered time is within company hours. If there are any errors it will display a message saying what the error is and will not save the
      * information.
      * @param actionEvent method is called when the save button is clicked.*/
@@ -341,7 +341,8 @@ public class addAppointmentController implements Initializable {
         return contactID;
     }
 
-    /**This */
+    /**This method is called when the save button is clicked and there are no errors or when the cancel button is clicked. It takes the user back to the main menu
+     * of the application.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

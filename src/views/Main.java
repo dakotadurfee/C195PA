@@ -21,8 +21,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**This class starts the application.*/
 public class Main extends Application {
 
+    /**This method loads the first screen in the application which is the login form.*/
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
@@ -31,7 +33,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
+    /**This method calls a method to connect to the database, fills the all customers list, fills the all appointments list, fills all the lists used for 1st
+     * level division data, and launches the application.*/
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
         getCustomers();
@@ -45,6 +48,8 @@ public class Main extends Application {
         JDBC.closeConnection();
     }
 
+    /**This method is called from main and gets each customer from the customer table in the database and adds them to the all customers list in the Customers
+     *  class.*/
     public static void getCustomers() throws SQLException {
         String sql = "SELECT * FROM customers";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -67,6 +72,8 @@ public class Main extends Application {
         }
     }
 
+    /**This method is called from main and gets each appointment from the appointments table in the database and adds them to the all appointments list in the
+     * Appointment class. It also changes the appointment start and end times to user time before adding them to the list.*/
     public static void getAppointments() throws SQLException{
         String sql = "SELECT * FROM appointments";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -111,6 +118,7 @@ public class Main extends Application {
         }
     }
 
+    /**This method is called from main and adds each country from the database to the country list in the CountryData class.*/
     public static void addCountries() throws SQLException{
         String sql = "SELECT Country FROM countries";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -122,6 +130,7 @@ public class Main extends Application {
         }
     }
 
+    /**This method is called from main and adds each U.S. division to the U.S. divisions list in the CountryData class.*/
     public static void addUSDivisions() throws SQLException{
         String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 1";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -133,6 +142,7 @@ public class Main extends Application {
         }
     }
 
+    /**This method is called from main and adds each UK division to the UK divisions list in the CountryData class.*/
     public static void addUKDivisions() throws SQLException{
         String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 2";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -144,6 +154,7 @@ public class Main extends Application {
         }
     }
 
+    /**This method is called from main and adds each Canada division to the Canada divisions list in the CountryData class.*/
     public static void addCanadaDivisions() throws SQLException{
         String sql = "SELECT Division FROM first_level_divisions WHERE Country_ID = 3";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -155,44 +166,4 @@ public class Main extends Application {
         }
     }
 
-    public static void upcomingAppointments(){
-        ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
-
-        DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        ZoneId utcZone = ZoneId.of("UTC");
-        ZoneId userZone = ZoneId.systemDefault();
-
-        LocalDateTime currentTime = LocalDateTime.now(utcZone);
-
-        for (Appointment appointment : Appointment.getAllAppointments()) {
-            LocalDateTime userAppointmentTime = LocalDateTime.parse(appointment.getStart(), dt_formatter);
-
-            ZonedDateTime userAppointmentTimeZDT = userAppointmentTime.atZone(userZone);
-
-            ZonedDateTime userAppointmentTimeUTC = userAppointmentTimeZDT.withZoneSameInstant(utcZone);
-
-            userAppointmentTime = userAppointmentTimeUTC.toLocalDateTime();
-
-            if ((userAppointmentTime.minusMinutes(15).isEqual(currentTime) || userAppointmentTime.minusMinutes(15).isBefore(currentTime)
-                    && userAppointmentTime.isAfter(currentTime))) {
-                upcomingAppointments.add(appointment);
-            }
-        }
-
-        if (upcomingAppointments.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Upcoming Appointments");
-            alert.setContentText("There are no upcoming appointments");
-            alert.showAndWait();
-        } else {
-            for (Appointment appointment : upcomingAppointments) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Upcoming Appointments");
-                alert.setContentText("Upcoming appointment:\n Appointment ID: " + appointment.getId() + "\n Start: " + appointment.getStart() + "\n " +
-                        "End: " + appointment.getEnd());
-                alert.showAndWait();
-            }
-        }
-    }
 }

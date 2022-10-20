@@ -193,6 +193,8 @@ public class ReportsController implements Initializable {
         typesPicker.setItems(types);
     }
 
+    /**This method fills the table with appointments under the selected type.
+     * @param actionEvent method is called once the user selects an appointment type.*/
     public void onTypeSelection(ActionEvent actionEvent){
         String type = (String)typesPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> typeAppointments = FXCollections.observableArrayList();
@@ -204,6 +206,8 @@ public class ReportsController implements Initializable {
         reportsTable.setItems(typeAppointments);
     }
 
+    /**This method changes the table to display appointments by month. It also sets the options for the months combo box.
+     * @param actionEvent method is called once the user selects the monthly appointments radio button.*/
     public void onMonthlyAppointments(ActionEvent actionEvent){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -240,6 +244,8 @@ public class ReportsController implements Initializable {
 
     }
 
+    /**This method fills the table with appointments under the selected month.
+     * @param actionEvent method is called once the user selects a month.*/
     public void onMonthlySelection(ActionEvent actionEvent){
         String month = (String)monthsPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
@@ -251,6 +257,8 @@ public class ReportsController implements Initializable {
         reportsTable.setItems(monthlyAppointments);
     }
 
+    /**This method is called at the end of the onMonthlyAppointments method, and it fills an observable list with all the months in string format.
+     * @return returns an observable list holding strings representing the 12 months of the year.*/
     public ObservableList<String> getMonths(){
         ObservableList<String> months = FXCollections.observableArrayList();
         months.add("01");
@@ -268,6 +276,8 @@ public class ReportsController implements Initializable {
         return months;
     }
 
+    /**This method changes the table to display appointments by customer. It also sets the options for the customer combo box.
+     * @param actionEvent method is called once the user selects the customer appointments combo box.*/
     public void onCustomerAppointments(ActionEvent actionEvent) throws SQLException {
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
@@ -311,6 +321,8 @@ public class ReportsController implements Initializable {
         customerPicker.setItems(customers);
     }
 
+    /**This method fills the table with appointments under the selected customer.
+     * @param actionEvent method is called once the user selects a customer.*/
     public void onCustomerSelection(ActionEvent actionEvent){
         int customer = (Integer)customerPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
@@ -322,6 +334,8 @@ public class ReportsController implements Initializable {
         reportsTable.setItems(customerAppointments);
     }
 
+    /**This method takes the user back to the main menu.
+     * @param actionEvent method is called once the user presses the main menu button.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

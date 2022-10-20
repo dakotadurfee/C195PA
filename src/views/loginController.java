@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/**This class controls the login page of the application.*/
 public class loginController implements Initializable {
 
     public Label username;

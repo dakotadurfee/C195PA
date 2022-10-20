@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 /**This class uses lambda expressions to replace a lot of the messy code that would have been used throughout the project.*/
 public class TimeConverter{
-    /**This method changes a string from local date time format to a yyyy-MM-dd HH:mm:ss format.
+    /**This method changes a string from local date time format to a yyyy-MM-dd HH:mm:ss format so that it can be displayed to the user.
      * @param s takes in a string and changes it to the yyyy-MM-dd HH:mm:ss format.
      * @return returns the new string in yyyy-MM-dd HH:mm:ss format.*/
     public static String toReadableString(String s){
@@ -40,6 +40,4 @@ public class TimeConverter{
         };
         return toUserTime.ToUTCTime(s);
     }
-
-
 }

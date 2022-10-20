@@ -434,8 +434,13 @@ public class mainMenuController implements Initializable {
      * @param appointmentList method takes in a list holding all the appointments a customer has and deletes each of those appointments.*/
     public void deleteAppointments(ObservableList<Appointment> appointmentList) throws SQLException {
         for(int i = 0; i < appointmentList.size(); i++){
+            String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setInt(1,appointmentList.get(i).getId());
+            ps.executeUpdate();
             Appointment.deleteAppointment(appointmentList.get(i));
         }
+
     }
 
     /**This method takes the user to the reports page of the application and is called when the user presses the reports button from the main menu.*/

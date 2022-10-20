@@ -54,11 +54,11 @@ public class loginController implements Initializable {
         String passw = passwordField.getText();
         boolean correct = false;
 
-        /*
+
         if(usern.equals("sqlUser") && passw.equals("Passw0rd!")){
             Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
             Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 924, 400);
+            Scene scene = new Scene(root, 1449, 400);
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
@@ -86,17 +86,6 @@ public class loginController implements Initializable {
         }
 
         outputFile.close();
-        */
-
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
-
 
     }
 }

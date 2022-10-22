@@ -129,7 +129,7 @@ public class AddCustomerController implements Initializable {
         }
 
         if(error == false) {
-            Customers customer = new Customers(customerID, customerName, address, postalCode, phone, createDate, "Script", lastUpdate, "Script", divisionID);
+            Customers customer = new Customers(customerID, customerName, address, postalCode, phone, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername(), divisionID);
             Customers.addCustomer(customer);
             addCustomerDB(customerID, customerName, address, postalCode, phone, createDate, lastUpdate, divisionID);
             toMain(actionEvent);
@@ -152,9 +152,9 @@ public class AddCustomerController implements Initializable {
         ps.setString(4,postalCode);
         ps.setString(5, phone);
         ps.setString(6, createDate);
-        ps.setString(7, "script");
+        ps.setString(7, loginController.getDBusername());
         ps.setString(8, lastUpdate);
-        ps.setString(9, "script");
+        ps.setString(9, loginController.getDBusername());
         ps.setInt(10, divisionID);
         ps.executeUpdate();
     }

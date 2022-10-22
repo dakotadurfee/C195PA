@@ -258,10 +258,10 @@ public class ModifyAppointmentController implements Initializable {
             mAppointment.setType(type);
             mAppointment.setStart(start);
             mAppointment.setEnd(end);
-            mAppointment.setCreatedBy("Script");
+            mAppointment.setCreatedBy(loginController.getDBusername());
             mAppointment.setLastUpdate(lastUpdate);
-            mAppointment.setLastUpdateBy("Script");
-            modifyAppointmentDB(appointmentID, customerID, userID, title, description, location, contactID, type, start, end, "Script", lastUpdate, "Script");
+            mAppointment.setLastUpdateBy(loginController.getDBusername());
+            modifyAppointmentDB(appointmentID, customerID, userID, title, description, location, contactID, type, start, end, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             toMain(actionEvent);
         }
     }

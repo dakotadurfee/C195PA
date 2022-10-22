@@ -1,6 +1,7 @@
 package views;
 
 import helper.TimeConverter;
+import helper.JDBC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +18,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -32,6 +36,7 @@ public class loginController implements Initializable {
     public Button loginbutton;
     public Label language;
     public Label timeZone;
+    private static String DBusername;
 
     /**This method checks to see what language and time zone the user's computer is using. It translates all the words in the application to the user's language and
      * displays what time zone they are in.*/
@@ -49,25 +54,33 @@ public class loginController implements Initializable {
     /**This method checks to see if the user's login information is valid. If the credentials are valid then it takes the user to the main menu of the application.
      * If the login information is incorrect an error message will be displayed. The method logs the date and time for every login attempt and if the login attempt
      * was successful. It saves that information to a login_activity.txt file.*/
-    public void setLoginbutton(ActionEvent actionEvent) throws IOException {
+    public void setLoginbutton(ActionEvent actionEvent) throws IOException, SQLException {
         String usern = usernameField.getText();
         String passw = passwordField.getText();
         boolean correct = false;
 
+        String sql = "SELECT Uesr_Name, Password FROM users";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            String username = rs.getString("User_Name");
+            String password = rs.getString("Password");
 
-        if(usern.equals("sqlUser") && passw.equals("Passw0rd!")){
-            Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-            Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1449, 400);
-            stage.setTitle("");
-            stage.setScene(scene);
-            stage.show();
-            correct = true;
+            if(usern.equals(username) && passw.equals(password)){
+                Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
+                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root, 1449, 400);
+                stage.setTitle("");
+                stage.setScene(scene);
+                stage.show();
+                correct = true;
+                setDBusername(username);
+            }
         }
-        else{
+
+        if(!correct){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("incorrect login");
-            alert.setContentText("Username or password are incorrect");
+            alert.setContentText("Incorrect username or password"):
             alert.showAndWait();
         }
 
@@ -87,6 +100,14 @@ public class loginController implements Initializable {
 
         outputFile.close();
 
+    }
+
+    public void setDBusername(String username){
+        DBusername = username;
+    }
+
+    public static String getDBusername(){
+        return DBusername;
     }
 }
 

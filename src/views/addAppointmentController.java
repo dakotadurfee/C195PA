@@ -286,9 +286,9 @@ public class addAppointmentController implements Initializable {
             dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
         }
         if (error == false && dateError == false) {
-            Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
+            Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             Appointment.addAppointment(appointment);
-            addAppointmentDB(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, "script", lastUpdate, "script");
+            addAppointmentDB(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             toMain(actionEvent);
         }
     }

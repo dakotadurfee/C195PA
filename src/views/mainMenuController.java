@@ -126,7 +126,7 @@ public class mainMenuController implements Initializable {
     public void addAppointment(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/addAppointment.fxml"));
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 820, 608);
+        Scene scene = new Scene(root, 820, 491);
         stage.setTitle("Add Appointment");
         stage.setScene(scene);
         stage.show();
@@ -332,7 +332,7 @@ public class mainMenuController implements Initializable {
         else {
             Parent root = FXMLLoader.load(getClass().getResource("/views/ModifyAppointment.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 820, 608);
+            Scene scene = new Scene(root, 820, 491);
             stage.setTitle("Modify Appointment");
             stage.setScene(scene);
             stage.show();

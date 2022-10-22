@@ -3,6 +3,8 @@ package views;
 import classes.Appointment;
 import helper.JDBC;
 import helper.TimeConverter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,9 +35,8 @@ public class ModifyAppointmentController implements Initializable {
     public TextField descriptionField;
     public TextField locationField;
     public TextField typeField;
-    public TextField contactIDField;
+    public ComboBox contactIDField;
     public TextField customerIDField;
-    public TextField userIDField;
     public DatePicker startDateField;
     public Spinner startTimeHours;
     public Spinner startTimeMinutes;
@@ -50,14 +52,27 @@ public class ModifyAppointmentController implements Initializable {
         descriptionField.setText(mAppointment.getDescription());
         locationField.setText(mAppointment.getLocation());
         typeField.setText(mAppointment.getType());
-        contactIDField.setText(Integer.toString(mAppointment.getContact()));
+        contactIDField.setValue(mAppointment.getContact());
         customerIDField.setText(Integer.toString(mAppointment.getCustomerID()));
-        userIDField.setText(Integer.toString(mAppointment.getUserID()));
         startDateField.setValue(LocalDate.of(Integer.parseInt(mAppointment.getStart().substring(0,4)), Integer.parseInt(mAppointment.getStart().substring(5,7)), Integer.parseInt(mAppointment.getStart().substring(8,10))));
         startTimeHours.getValueFactory().setValue(Integer.parseInt(mAppointment.getStart().substring(12,13)));
         startTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getStart().substring(14,16)));
         endTimeHours.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(12,13)));
         endTimeMinutes.getValueFactory().setValue(Integer.parseInt(mAppointment.getEnd().substring(14,16)));
+
+        String sql = "SELECT Contact_Name FROM contacts";
+        try{
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ObservableList<String> contactNames = FXCollections.observableArrayList();
+            while(rs.next()){
+                String contact = rs.getString("Contact_Name");
+                contactNames.add(contact);
+            }
+            contactIDField.setItems(contactNames);
+        } catch(SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
     /**This method saves all the user entered information for the selected appointment. It uses error checking to see if there are any blank fields or if there are characers in fields that require integers. It also checks
@@ -70,6 +85,8 @@ public class ModifyAppointmentController implements Initializable {
         String description = null;
         String location = null;
         String type = null;
+        String contact = null;
+        int contactID = 0;
         if (titleField.getText().equals("")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Title field cannot be blank");
@@ -106,22 +123,16 @@ public class ModifyAppointmentController implements Initializable {
             type = typeField.getText();
         }
 
-        int contactID = 0;
-        try {
-            contactID = Integer.parseInt(contactIDField.getText());
-            if(contactID < 1 || contactID > 3) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Contact ID does not match an existing contact ID");
-                alert.showAndWait();
-                error = true;
-            }
-        } catch (NumberFormatException e) {
+        contact = (String)contactIDField.getSelectionModel().getSelectedItem();
+        if(contact == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must enter an integer in contact ID field");
+            alert.setContentText("Must select contact");
             alert.showAndWait();
             error = true;
         }
-
+        else {
+            contactID = getContactID(contact);
+        }
 
         int customerID = 0;
         try {
@@ -129,16 +140,6 @@ public class ModifyAppointmentController implements Initializable {
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Must enter an integer in customer ID field");
-            alert.showAndWait();
-            error = true;
-        }
-
-        int userID = 0;
-        try {
-            userID = Integer.parseInt(userIDField.getText());
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must enter an integer in user ID field");
             alert.showAndWait();
             error = true;
         }
@@ -250,7 +251,6 @@ public class ModifyAppointmentController implements Initializable {
         int appointmentID = Integer.parseInt(appointmentIDField.getText());
         if(error == false && dateError == false) {
             mAppointment.setCustomerID(customerID);
-            mAppointment.setUserID(userID);
             mAppointment.setTitle(title);
             mAppointment.setDescription(description);
             mAppointment.setLocation(location);
@@ -261,7 +261,8 @@ public class ModifyAppointmentController implements Initializable {
             mAppointment.setCreatedBy(loginController.getDBusername());
             mAppointment.setLastUpdate(lastUpdate);
             mAppointment.setLastUpdateBy(loginController.getDBusername());
-            modifyAppointmentDB(appointmentID, customerID, userID, title, description, location, contactID, type, start, end, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
+            modifyAppointmentDB(appointmentID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end,
+                    loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             toMain(actionEvent);
         }
     }
@@ -290,6 +291,18 @@ public class ModifyAppointmentController implements Initializable {
         ps.setInt(11, userID);
         ps.setInt(12, contactID);
         ps.executeUpdate();
+    }
+
+    public int getContactID(String contact) throws SQLException {
+        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        int contactID = 0;
+        while(rs.next()){
+            contactID = rs.getInt("Contact_ID");
+        }
+        return contactID;
     }
 
     /**This method takes the user back the main menu of the application.

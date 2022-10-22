@@ -46,3 +46,51 @@ Unsuccessful
 User log-in Attempt: 
 Date: 2022-10-22 17:07:58
 Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:13
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:28:09
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:30:33
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:33:08
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:36:05
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:36:10
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:38:05
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:39:32
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:40:48
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:43:19
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:53:50
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:53:53
+Successful

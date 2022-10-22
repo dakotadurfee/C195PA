@@ -13,7 +13,9 @@ public class TimeConverter{
      * @return returns the new string in yyyy-MM-dd HH:mm:ss format.*/
     public static String toReadableString(String s){
         LDTtoStringInterface ldttoString = (string) -> {
-            string = string.substring(0, string.length() - 10).replace('T', ' ');
+            int length = string.length();
+            string = string.substring(0, 19);
+            string = string.replace('T', ' ');
             return string;
         };
         return ldttoString.LDTtoString(s);

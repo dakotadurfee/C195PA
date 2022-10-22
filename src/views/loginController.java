@@ -38,6 +38,7 @@ public class loginController implements Initializable {
     public Label timeZone;
     private static String DBusername;
     private String tAlert;
+    private static int userID;
 
     /**This method checks to see what language and time zone the user's computer is using. It translates all the words in the application to the user's language and
      * displays what time zone they are in.*/
@@ -61,7 +62,7 @@ public class loginController implements Initializable {
         String passw = passwordField.getText();
         boolean correct = false;
 
-        String sql = "SELECT User_Name, Password FROM users";
+        String sql = "SELECT User_Name, Password, User_ID FROM users";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while(rs.next()){
@@ -77,6 +78,7 @@ public class loginController implements Initializable {
                 stage.show();
                 correct = true;
                 setDBusername(username);
+                setUserID(rs.getInt("User_ID"));
             }
         }
 
@@ -110,6 +112,14 @@ public class loginController implements Initializable {
 
     public static String getDBusername(){
         return DBusername;
+    }
+
+    public void setUserID(int userID){
+        this.userID = userID;
+    }
+
+    public static int getUserID(){
+        return userID;
     }
 }
 

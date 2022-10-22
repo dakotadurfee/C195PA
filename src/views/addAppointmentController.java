@@ -162,16 +162,6 @@ public class addAppointmentController implements Initializable {
             error = true;
         }
 
-        int userID = 0;
-        try {
-            userID = Integer.parseInt(userIDField.getText());
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must enter an integer in user ID field");
-            alert.showAndWait();
-            error = true;
-        }
-
         String startDate = null;
         String end = null;
         try {
@@ -286,9 +276,9 @@ public class addAppointmentController implements Initializable {
             dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
         }
         if (error == false && dateError == false) {
-            Appointment appointment = new Appointment(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
+            Appointment appointment = new Appointment(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             Appointment.addAppointment(appointment);
-            addAppointmentDB(dynamicID, customerID, userID, title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
+            addAppointmentDB(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             toMain(actionEvent);
         }
     }
@@ -320,7 +310,7 @@ public class addAppointmentController implements Initializable {
         ps.setString(10,lastUpdate);
         ps.setString(11,lastUpdateBy);
         ps.setInt(12,customerID);
-        ps.setInt(13,userID);
+        ps.setInt(13,loginController.getUserID());
         ps.setInt(14,contactID);
         ps.executeUpdate();
     }

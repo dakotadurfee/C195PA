@@ -37,6 +37,7 @@ public class loginController implements Initializable {
     public Label language;
     public Label timeZone;
     private static String DBusername;
+    private String tAlert;
 
     /**This method checks to see what language and time zone the user's computer is using. It translates all the words in the application to the user's language and
      * displays what time zone they are in.*/
@@ -47,6 +48,7 @@ public class loginController implements Initializable {
         username.setText(resourceBundle.getString("username"));
         password.setText(resourceBundle.getString("password"));
         language.setText(locale.getLanguage());
+        tAlert = resourceBundle.getString("alertMessage");
         TimeZone zone = TimeZone.getTimeZone(TimeZone.getDefault().toZoneId());
         timeZone.setText(zone.getDisplayName());
     }
@@ -54,7 +56,7 @@ public class loginController implements Initializable {
     /**This method checks to see if the user's login information is valid. If the credentials are valid then it takes the user to the main menu of the application.
      * If the login information is incorrect an error message will be displayed. The method logs the date and time for every login attempt and if the login attempt
      * was successful. It saves that information to a login_activity.txt file.*/
-    public void setLoginbutton(ActionEvent actionEvent, ResourceBundle resourceBundle) throws IOException, SQLException {
+    public void setLoginbutton(ActionEvent actionEvent) throws IOException, SQLException {
         String usern = usernameField.getText();
         String passw = passwordField.getText();
         boolean correct = false;
@@ -79,10 +81,8 @@ public class loginController implements Initializable {
         }
 
         if(!correct){
-            Locale locale = Locale.getDefault();
-            resourceBundle = ResourceBundle.getBundle("login/languages", locale);
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(resourceBundle.getString("alert"));
+            alert.setContentText(tAlert);
             alert.showAndWait();
         }
 

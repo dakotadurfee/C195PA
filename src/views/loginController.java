@@ -61,7 +61,7 @@ public class loginController implements Initializable {
         String passw = passwordField.getText();
         boolean correct = false;
 
-        String sql = "SELECT Uesr_Name, Password FROM users";
+        String sql = "SELECT User_Name, Password FROM users";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         while(rs.next()){

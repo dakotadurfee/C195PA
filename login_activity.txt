@@ -18,3 +18,31 @@ Successful
 User log-in Attempt: 
 Date: 2022-10-20 15:04:21
 Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:04:55
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:05:00
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:05:04
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:05:11
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:05:20
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:07:50
+Unsuccessful
+
+User log-in Attempt: 
+Date: 2022-10-22 17:07:58
+Successful

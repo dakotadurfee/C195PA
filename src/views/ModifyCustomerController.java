@@ -179,7 +179,7 @@ public class ModifyCustomerController implements Initializable {
 
     /**This method is called at the end of the onSave method and takes all the variables needed for the database and updates the information for the selected customer.*/
     public void modifyCustomerDB(String customerName, String address, String postalCode, String phone, String lastUpdate, int divisionID) throws SQLException{
-        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ? Division_ID = ? " +
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Division_ID = ? " +
                 "WHERE Customer_ID = " + Integer.parseInt(customerIDField.getText());
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 

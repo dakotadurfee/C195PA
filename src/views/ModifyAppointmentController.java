@@ -52,7 +52,11 @@ public class ModifyAppointmentController implements Initializable {
         descriptionField.setText(mAppointment.getDescription());
         locationField.setText(mAppointment.getLocation());
         typeField.setText(mAppointment.getType());
-        contactIDField.setValue(mAppointment.getContact());
+        try {
+            contactIDField.setValue(getContactName(mAppointment.getContact()));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         customerIDField.setText(Integer.toString(mAppointment.getCustomerID()));
         startDateField.setValue(LocalDate.of(Integer.parseInt(mAppointment.getStart().substring(0,4)), Integer.parseInt(mAppointment.getStart().substring(5,7)), Integer.parseInt(mAppointment.getStart().substring(8,10))));
         startTimeHours.getValueFactory().setValue(Integer.parseInt(mAppointment.getStart().substring(12,13)));
@@ -303,6 +307,17 @@ public class ModifyAppointmentController implements Initializable {
             contactID = rs.getInt("Contact_ID");
         }
         return contactID;
+    }
+
+    public String getContactName(int contactID) throws SQLException {
+        String sql = "SELECT Contact_Name FROM contacts WHERE Contact_ID = '" + contactID + "'";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        String contactName = null;
+        while(rs.next()){
+            contactName = rs.getString("Contact_Name");
+        }
+        return contactName;
     }
 
     /**This method takes the user back the main menu of the application.

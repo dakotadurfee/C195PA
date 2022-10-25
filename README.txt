@@ -18,3 +18,5 @@ IDE: IntelliJ IDEA Community Edition 2021.1.3
 JDK: version 11.0.11
 
 JavaFX version: javafx-sdk-17.0.1
+
+MySQL Connector driver: mysql-connector-java-8.0.25

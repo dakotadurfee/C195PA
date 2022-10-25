@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 /**This class uses lambda expressions to replace a lot of the messy code that would have been used throughout the project.*/
 public class TimeConverter{
-    /**This method changes a string from local date time format to a yyyy-MM-dd HH:mm:ss format so that it can be displayed to the user.
+    /**This method uses a lambda expression to change a string from a local date time format to a more readable format so it can
+     * be displayed to the user. It removes the milliseconds from the end of the string and changes the 'T' to a whitespace.
      * @param s takes in a string and changes it to the yyyy-MM-dd HH:mm:ss format.
      * @return returns the new string in yyyy-MM-dd HH:mm:ss format.*/
     public static String toReadableString(String s){
@@ -21,7 +22,7 @@ public class TimeConverter{
         return ldttoString.LDTtoString(s);
     }
 
-    /**This method changes a string that is in user time and changes it to UTC time, so it can be stored in the database.
+    /**This method uses a lambda expression to change a string from user time to UTC time so that it can be stored in the database.
      * @param s takes a string and converts it to UTC time.
      * @return returns the string in UTC time.*/
     public static String toUTCTime(String s){

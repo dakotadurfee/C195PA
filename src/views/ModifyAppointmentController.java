@@ -3,6 +3,7 @@ package views;
 import classes.Appointment;
 import helper.JDBC;
 import helper.TimeConverter;
+import helper.getContact;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -135,7 +136,7 @@ public class ModifyAppointmentController implements Initializable {
             error = true;
         }
         else {
-            contactID = getContactID(contact);
+            contactID = getContact.contactID(contact);
         }
 
         int customerID = 0;

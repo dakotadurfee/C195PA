@@ -4,6 +4,8 @@ import classes.Appointment;
 import classes.Customers;
 import helper.JDBC;
 import helper.LDTtoStringInterface;
+import helper.contactIDInterface;
+import helper.getContact;
 import helper.TimeConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -136,7 +138,7 @@ public class addAppointmentController implements Initializable {
             error = true;
         }
         else {
-            contactID = getContactID(contact);
+            contactID = getContact.contactID(contact);
         }
 
 
@@ -313,22 +315,6 @@ public class addAppointmentController implements Initializable {
         ps.setInt(13,loginController.getUserID());
         ps.setInt(14,contactID);
         ps.executeUpdate();
-    }
-
-    /**The getContactID method is called from the onSave method where the user selects a contact name from a combo box and this method returns the contact ID
-     * for that contact name.
-     * @param contact takes in a string and searches for that name in the database and assigns the contact ID for the name to the contactID variable.
-     * @return returns the contact ID of the contact name that was taken in as a parameter.*/
-    public int getContactID(String contact) throws SQLException {
-        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        int contactID = 0;
-        while(rs.next()){
-            contactID = rs.getInt("Contact_ID");
-        }
-        return contactID;
     }
 
     /**This method is called when the save button is clicked and there are no errors or when the cancel button is clicked. It takes the user back to the main menu

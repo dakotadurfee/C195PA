@@ -130,3 +130,11 @@ Successful
 User log-in Attempt: 
 Date: 2022-10-25 13:30:53
 Successful
+
+User log-in Attempt: 
+Date: 2022-10-26 14:15:32
+Successful
+
+User log-in Attempt: 
+Date: 2022-10-26 14:17:43
+Successful

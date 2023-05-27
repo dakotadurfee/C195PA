@@ -9,7 +9,7 @@ when the attempt was made and if it was successful or not. The login form is tra
 
 Author: Dakota Durfee
 
-Contact information: ddurf11@wgu.edu
+Contact information: dakotadurfee23@gmail.com | 208-670-1335
 
 Date: 10-20-2022
 

@@ -105,36 +105,28 @@ public class ModifyCustomerController implements Initializable {
         String phone = null;
         int divisionID = 0;
         if(customerNameField.getText().isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Customer name field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Customer name field cannot be blank");
             error = true;
         }else{
             customerName = customerNameField.getText();
         }
 
         if(addressField.getText().isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Address field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Address field cannot be blank");
             error = true;
         } else{
             address = addressField.getText();
         }
 
         if(postalCodeField.getText().isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Postal code field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Postal code field cannot be blank");
             error = true;
         } else{
             postalCode = postalCodeField.getText();
         }
 
         if(phoneField.getText().isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Phone field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Phone field cannot be blank");
             error = true;
         } else{
             phone = phoneField.getText();
@@ -144,9 +136,7 @@ public class ModifyCustomerController implements Initializable {
             String countryName = (String) countryField.getSelectionModel().getSelectedItem();
             String divisionName = (String) divisionField.getSelectionModel().getSelectedItem();
             if(divisionName.equals(null)){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Must select country and division");
-                alert.showAndWait();
+                Main.showError("Must select country and division");
                 error = true;
             }
             String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = " + "'" + divisionName + "'";
@@ -156,9 +146,7 @@ public class ModifyCustomerController implements Initializable {
                 divisionID = rs.getInt("Division_ID");
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must select country and division");
-            alert.showAndWait();
+            Main.showError("Must select country and division");
             error = true;
         }
 

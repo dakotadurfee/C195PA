@@ -285,10 +285,7 @@ public class mainMenuController implements Initializable {
     public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
         Appointment appointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
         if(appointment == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setContentText("Must select appointment to be deleted");
-            alert.showAndWait();
+            Main.showError("Must select appointment to be deleted");
         }
         else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -317,10 +314,7 @@ public class mainMenuController implements Initializable {
     public void modifyCustomer(ActionEvent actionEvent) throws IOException {
         mCustomer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
         if(mCustomer == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setContentText("Must select customer to be modified");
-            alert.showAndWait();
+            Main.showError("Must select customer to be modified");
         }
         else{
             Main.switchScene("/views/ModifyCustomer.fxml", 692, 400, "Modify Customer", actionEvent);
@@ -333,10 +327,7 @@ public class mainMenuController implements Initializable {
     public void deleteCustomer(ActionEvent actionEvent) throws IOException, SQLException {
         Customers customer = (Customers) appointmentsTable.getSelectionModel().getSelectedItem();
         if(customer == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setContentText("Must select customer to be deleted");
-            alert.showAndWait();
+            Main.showError("Must select customer to be deleted");
         }
         else{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

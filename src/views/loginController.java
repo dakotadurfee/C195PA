@@ -78,9 +78,7 @@ public class loginController implements Initializable {
         }
 
         if(!correct){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(tAlert);
-            alert.showAndWait();
+            Main.showError("Invalid username or password");
         }
 
         FileWriter fwWriter = new FileWriter("login_activity.txt", true);

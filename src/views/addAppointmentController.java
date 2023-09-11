@@ -94,36 +94,28 @@ public class addAppointmentController implements Initializable {
         int contactID = 0;
         String type = null;
         if (titleField.getText().equals("")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Title field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Title field cannot be blank");
             error = true;
         } else {
             title = titleField.getText();
         }
 
         if (descriptionField.getText().equals("")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Description field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Description field cannot be blank");
             error = true;
         } else {
             description = descriptionField.getText();
         }
 
         if (locationField.getText().equals("")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Location field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Location field cannot be blank");
             error = true;
         } else {
             location = locationField.getText();
         }
 
         if (typeField.getText().equals("")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Type field cannot be blank");
-            alert.showAndWait();
+            Main.showError("Type field cannot be blank");
             error = true;
         } else {
             type = typeField.getText();
@@ -132,9 +124,7 @@ public class addAppointmentController implements Initializable {
 
         contact = (String)contactField.getSelectionModel().getSelectedItem();
         if(contact == null){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must select contact");
-            alert.showAndWait();
+            Main.showError("Must select contact");
             error = true;
         }
         else {
@@ -152,15 +142,11 @@ public class addAppointmentController implements Initializable {
                 }
             }
             if(found == false){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Customer ID does not match an existing customer ID");
-                alert.showAndWait();
+                Main.showError("Customer ID does not match an existing customer ID");
                 error = true;
             }
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must enter an integer in customer ID field");
-            alert.showAndWait();
+            Main.showError("Must enter an integer in customer ID field");
             error = true;
         }
 
@@ -169,9 +155,7 @@ public class addAppointmentController implements Initializable {
         try {
             startDate = startDateField.getValue().toString();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Must select start date");
-            alert.showAndWait();
+            Main.showError("Must select start date");
             dateError = true;
         }
 
@@ -216,16 +200,12 @@ public class addAppointmentController implements Initializable {
             ZonedDateTime userEndEST = endZDT.withZoneSameInstant(ESTzone);
 
             if(userStartEST.toLocalDateTime().isBefore(openTime) || userEndEST.toLocalDateTime().isAfter(closeTime)){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Selected time is outside of company hours: 8:00a.m. - 10:00p.m. EST");
-                alert.showAndWait();
+                Main.showError("Selected time is outside of company hours: 8:00a.m. - 10:00p.m. EST");
                 error = true;
             }
 
             if (LDTend.isBefore(LDTstart) || LDTend.isEqual(LDTstart)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("End time must be after start time");
-                alert.showAndWait();
+                Main.showError("End time must be after start time");
                 error = true;
             } else {
                 for (Appointment appointment : Appointment.getAllAppointments()) {
@@ -237,29 +217,19 @@ public class addAppointmentController implements Initializable {
                         LocalDateTime appointmentLDTstart = LocalDateTime.parse(appointmentStart);
                         LocalDateTime appointmentLDTend = LocalDateTime.parse(appointmentEnd);
                         if (LDTstart.isAfter(appointmentLDTstart) && LDTstart.isBefore(appointmentLDTend)) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                            alert.showAndWait();
+                            Main.showError("This appointment overlaps with another appointment for the same customer");
                             error = true;
                         } else if (LDTend.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                            alert.showAndWait();
+                            Main.showError("This appointment overlaps with another appointment for the same customer");
                             error = true;
                         } else if (LDTstart.isBefore(appointmentLDTstart) && LDTend.isAfter(appointmentLDTend)) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                            alert.showAndWait();
+                            Main.showError("This appointment overlaps with another appointment for the same customer");
                             error = true;
                         } else if (LDTstart.isAfter(appointmentLDTstart) && LDTend.isBefore(appointmentLDTend)) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                            alert.showAndWait();
+                            Main.showError("This appointment overlaps with another appointment for the same customer");
                             error = true;
                         } else if(LDTstart.isEqual(appointmentLDTstart) || LDTend.isEqual(appointmentLDTend)){
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setContentText("This appointment overlaps with another appointment for the same customer");
-                            alert.showAndWait();
+                            Main.showError("This appointment overlaps with another appointment for the same customer");
                             error = true;
                         }
                     }

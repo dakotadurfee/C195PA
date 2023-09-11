@@ -281,7 +281,7 @@ public class addAppointmentController implements Initializable {
             Appointment appointment = new Appointment(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             Appointment.addAppointment(appointment);
             addAppointmentDB(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
-            toMain(actionEvent);
+            Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
         }
     }
 
@@ -315,16 +315,5 @@ public class addAppointmentController implements Initializable {
         ps.setInt(13,loginController.getUserID());
         ps.setInt(14,contactID);
         ps.executeUpdate();
-    }
-
-    /**This method is called when the save button is clicked and there are no errors or when the cancel button is clicked. It takes the user back to the main menu
-     * of the application.*/
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
     }
 }

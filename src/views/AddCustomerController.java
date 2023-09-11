@@ -132,7 +132,7 @@ public class AddCustomerController implements Initializable {
             Customers customer = new Customers(customerID, customerName, address, postalCode, phone, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername(), divisionID);
             Customers.addCustomer(customer);
             addCustomerDB(customerID, customerName, address, postalCode, phone, createDate, lastUpdate, divisionID);
-            toMain(actionEvent);
+            Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
         }
     }
 
@@ -172,15 +172,5 @@ public class AddCustomerController implements Initializable {
         else if(country.equals("Canada")){
             divisionField.setItems(CountryData.getCanadadivisionList());
         }
-    }
-
-    /**This method is called the end of the onSave method if there are no errors or if the cancel button is clicked, and it takes the user back to the main menu.*/
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
     }
 }

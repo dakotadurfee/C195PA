@@ -70,15 +70,6 @@ public class loginController implements Initializable {
             String password = rs.getString("Password");
 
             if(usern.equals(username) && passw.equals(password)){
-                /*
-                Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-                Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root, 1449, 400);
-                stage.setTitle("");
-                stage.setScene(scene);
-                stage.show();
-
-                 */
                 Main.switchScene("/views/mainMenu.fxml", 1449, 400, "", actionEvent);
                 correct = true;
                 setDBusername(username);

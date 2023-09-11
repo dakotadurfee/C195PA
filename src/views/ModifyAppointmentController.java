@@ -268,7 +268,7 @@ public class ModifyAppointmentController implements Initializable {
             mAppointment.setLastUpdateBy(loginController.getDBusername());
             modifyAppointmentDB(appointmentID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end,
                     loginController.getDBusername(), lastUpdate, loginController.getDBusername());
-            toMain(actionEvent);
+            Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
         }
     }
 
@@ -319,16 +319,5 @@ public class ModifyAppointmentController implements Initializable {
             contactName = rs.getString("Contact_Name");
         }
         return contactName;
-    }
-
-    /**This method takes the user back the main menu of the application.
-     * @param actionEvent method is called at the end of the onSave method if there are no errors or if the user clicks the cancel button.*/
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
     }
 }

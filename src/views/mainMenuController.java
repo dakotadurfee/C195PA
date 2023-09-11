@@ -53,10 +53,10 @@ public class mainMenuController implements Initializable {
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
     private static boolean called = false;
-    private Map<TableColumn, String> appointmentsTextMap;
-    private Map<TableColumn, String> appointmentsValueMap;
-    private Map<TableColumn, String> customersTextMap;
-    private Map<TableColumn, String> customersValueMap;
+    public static Map<TableColumn, String> appointmentsTextMap;
+    public static Map<TableColumn, String> appointmentsValueMap;
+    public static Map<TableColumn, String> customersTextMap;
+    public static Map<TableColumn, String> customersValueMap;
 
     /**This method is called every time the user is sent to the main menu and populates the table with all the scheduled appointments. The first time it is called
      * it displays a message saying if there are any upcoming appointments or not. It does not indicate if there are upcoming appointments after the first time the
@@ -275,12 +275,7 @@ public class mainMenuController implements Initializable {
             alert.showAndWait();
         }
         else {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/ModifyAppointment.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 820, 491);
-            stage.setTitle("Modify Appointment");
-            stage.setScene(scene);
-            stage.show();
+            Main.switchScene("/views/ModifyAppointment.fxml", 820, 491, "Modify Appointment", actionEvent);
         }
     }
 
@@ -328,12 +323,7 @@ public class mainMenuController implements Initializable {
             alert.showAndWait();
         }
         else{
-            Parent root = FXMLLoader.load(getClass().getResource("/views/ModifyCustomer.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 692, 400);
-            stage.setTitle("Modify Customer");
-            stage.setScene(scene);
-            stage.show();
+            Main.switchScene("/views/ModifyCustomer.fxml", 692, 400, "Modify Customer", actionEvent);
         }
     }
 
@@ -390,11 +380,6 @@ public class mainMenuController implements Initializable {
 
     /**This method takes the user to the reports page of the application and is called when the user presses the reports button from the main menu.*/
     public void toReports(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/Reports.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Reports");
-        stage.setScene(scene);
-        stage.show();
+        Main.switchScene("/views/Reports.fxml", 1449, 400, "Reports", actionEvent);
     }
 }

@@ -2,6 +2,7 @@ package views;
 
 import classes.Appointment;
 import classes.Customers;
+import views.mainMenuController;
 import helper.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,6 +79,17 @@ public class ReportsController implements Initializable {
         }
     }
 
+    public void setAppointmentsTable(){
+        for(TableColumn column: mainMenuController.appointmentsTextMap.keySet()){
+            column.setText(mainMenuController.appointmentsTextMap.get(column));
+        }
+
+        for(TableColumn column: mainMenuController.appointmentsValueMap.keySet()){
+            column.setCellValueFactory(new PropertyValueFactory<>(mainMenuController.appointmentsValueMap.get(column)));
+        }
+        reportsTable.setItems(emptyList);
+    }
+
     /**This method changes the table to display the information for the appointments by contact. It also sets the items for the contacts field with all the contacts
      * from the database.
      * @param actionEvent method is called when the user selects the contact schedule radio button.*/
@@ -152,37 +164,11 @@ public class ReportsController implements Initializable {
      * from the database.
      * @param actionEvent method is called when the user selects the type appointments radio button.*/
     public void onTypeAppointments(ActionEvent actionEvent) throws SQLException {
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        setAppointmentsTable();
         contactsPicker.setVisible(false);
-        typesPicker.setVisible(true);
         monthsPicker.setVisible(false);
         customerPicker.setVisible(false);
-        reportsTable.setItems(emptyList);
-
+        typesPicker.setVisible(true);
         String sql = "SELECT Type FROM appointments";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -209,40 +195,15 @@ public class ReportsController implements Initializable {
     /**This method changes the table to display appointments by month. It also sets the options for the months combo box.
      * @param actionEvent method is called once the user selects the monthly appointments radio button.*/
     public void onMonthlyAppointments(ActionEvent actionEvent){
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        setAppointmentsTable();
         contactsPicker.setVisible(false);
         typesPicker.setVisible(false);
-        monthsPicker.setVisible(true);
         customerPicker.setVisible(false);
-        reportsTable.setItems(emptyList);
-
-        monthsPicker.setItems(getMonths());
-
+        monthsPicker.setVisible(true);
+        monthsPicker.setItems((getMonths()));
     }
+
+
 
     /**This method fills the table with appointments under the selected month.
      * @param actionEvent method is called once the user selects a month.*/
@@ -279,37 +240,11 @@ public class ReportsController implements Initializable {
     /**This method changes the table to display appointments by customer. It also sets the options for the customer combo box.
      * @param actionEvent method is called once the user selects the customer appointments combo box.*/
     public void onCustomerAppointments(ActionEvent actionEvent) throws SQLException {
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        setAppointmentsTable();
         contactsPicker.setVisible(false);
         typesPicker.setVisible(false);
         monthsPicker.setVisible(false);
         customerPicker.setVisible(true);
-        reportsTable.setItems(emptyList);
-
         String sql = "SELECT Customer_ID FROM customers";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -337,12 +272,7 @@ public class ReportsController implements Initializable {
     /**This method takes the user back to the main menu.
      * @param actionEvent method is called once the user presses the main menu button.*/
     public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
+        Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
 
 

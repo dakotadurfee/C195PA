@@ -173,7 +173,7 @@ public class ModifyCustomerController implements Initializable {
             mCustomer.setLastUpdate(lastUpdate);
             mCustomer.setDivisionID(divisionID);
             modifyCustomerDB(customerName, address, postalCode, phone, lastUpdate, divisionID);
-            toMain(actionEvent);
+            Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
         }
     }
 
@@ -194,16 +194,5 @@ public class ModifyCustomerController implements Initializable {
         ps.setString(7, loginController.getDBusername());
         ps.setInt(8, divisionID);
         ps.executeUpdate();
-    }
-
-    /**This method takes the user to the main menu.
-     * @param actionEvent method is called at the end of the onSave method or if the user presses the cancel button.*/
-    public void toMain(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/mainMenu.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1449, 400);
-        stage.setTitle("Main Menu");
-        stage.setScene(scene);
-        stage.show();
     }
 }

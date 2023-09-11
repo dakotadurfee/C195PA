@@ -6,11 +6,14 @@ import classes.Customers;
 import helper.JDBC;
 import helper.TimeConverter;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -142,6 +145,15 @@ public class Main extends Application {
             String division = rs.getString("Division");
             CountryData.addCanadaDivision(division);
         }
+    }
+
+    public static void switchScene(String resource, int width, int height, String title, ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Main.class.getResource(resource));
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, width, height);
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

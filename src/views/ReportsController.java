@@ -17,6 +17,7 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -24,60 +25,62 @@ import java.util.ResourceBundle;
 /**This method controls the reports page in the user interface.*/
 public class ReportsController implements Initializable {
 
-    public TableColumn<Appointment, Integer> firstCol;
-    public TableColumn secondCol;
-    public TableColumn thirdCol;
-    public TableColumn fourthCol;
-    public TableColumn fifthCol;
-    public TableColumn sixthCol;
-    public TableColumn seventhCol;
-    public TableColumn eighthCol;
-    public TableColumn ninthCol;
-    public TableColumn tenthCol;
-    public TableColumn eleventhCol;
-    public TableColumn twelfthCol;
+    public TableColumn<Appointment, String> firstCol;
+    public TableColumn<Appointment, String> secondCol;
+    public TableColumn<Appointment, String> thirdCol;
+    public TableColumn<Appointment, String> fourthCol;
+    public TableColumn<Appointment, String> fifthCol;
+    public TableColumn<Appointment, String> sixthCol;
+    public TableColumn<Appointment, String> seventhCol;
+    public TableColumn<Appointment, String> eighthCol;
+    public TableColumn<Appointment, String> ninthCol;
+    public TableColumn<Appointment, String> tenthCol;
+    public TableColumn<Appointment, String> eleventhCol;
+    public TableColumn<Appointment, String> twelfthCol;
     public ToggleGroup schedules;
-    public TableView reportsTable;
-    public ComboBox contactsPicker;
-    public ComboBox typesPicker;
-    public ComboBox monthsPicker;
-    public ComboBox customerPicker;
-    private Map<TableColumn, String> appointmentsTextMap;
-    private Map<TableColumn, String> appointmentsValueMap;
-    private ObservableList<Appointment> emptyList = FXCollections.observableArrayList();
+    public TableView<Appointment> reportsTable;
+    public ComboBox<String> contactsPicker;
+    public ComboBox<String> typesPicker;
+    public ComboBox<String> monthsPicker;
+    public ComboBox<Integer> customerPicker;
+    private Map<TableColumn<Appointment, String>, String> appointmentsTextMap;
+    private Map<TableColumn<Appointment, String>, String> appointmentsValueMap;
+    private final ObservableList<Appointment> emptyList = FXCollections.observableArrayList();
 
     /**This method is called when the reports page is loaded and sets the items for the contacts field with all the contacts from the database.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        appointmentsTextMap = new LinkedHashMap<>() {{
-            put(firstCol, "Appt ID");
-            put(secondCol, "Title");
-            put(thirdCol, "Description");
-            put(fourthCol, "Location");
-            put(fifthCol, "Contact");
-            put(sixthCol, "Type");
-            put(seventhCol, "Start Time");
-            put(eighthCol, "End Time");
-            put(ninthCol, "Start Date");
-            put(tenthCol, "Created By");
-            put(eleventhCol, "Customer ID");
-            put(twelfthCol, "User ID");
-        }};
+        Map<TableColumn<Appointment, String>, String> tempMap = new LinkedHashMap<>();
+        tempMap.put(firstCol, "Appt ID");
+        tempMap.put(secondCol, "Title");
+        tempMap.put(thirdCol, "Description");
+        tempMap.put(fourthCol, "Location");
+        tempMap.put(fifthCol, "Contact");
+        tempMap.put(sixthCol, "Type");
+        tempMap.put(seventhCol, "Start Time");
+        tempMap.put(eighthCol, "End Time");
+        tempMap.put(ninthCol, "Start Date");
+        tempMap.put(tenthCol, "Created By");
+        tempMap.put(eleventhCol, "Customer ID");
+        tempMap.put(twelfthCol, "User ID");
+        appointmentsTextMap = Collections.unmodifiableMap(tempMap);
 
-        appointmentsValueMap = new LinkedHashMap<>() {{
-            put(firstCol, "id");
-            put(secondCol, "title");
-            put(thirdCol, "description");
-            put(fourthCol, "location");
-            put(fifthCol, "contact");
-            put(sixthCol, "type");
-            put(seventhCol, "start");
-            put(eighthCol, "end");
-            put(ninthCol, "createDate");
-            put(tenthCol, "createdBy");
-            put(eleventhCol, "customerID");
-            put(twelfthCol, "userID");
-        }};
+        Map<TableColumn<Appointment, String>, String> tMap = new LinkedHashMap<>();
+        tMap.put(firstCol, "id");
+        tMap.put(secondCol, "title");
+        tMap.put(thirdCol, "description");
+        tMap.put(fourthCol, "location");
+        tMap.put(fifthCol, "contact");
+        tMap.put(sixthCol, "type");
+        tMap.put(seventhCol, "start");
+        tMap.put(eighthCol, "end");
+        tMap.put(ninthCol, "createDate");
+        tMap.put(tenthCol, "createdBy");
+        tMap.put(eleventhCol, "customerID");
+        tMap.put(twelfthCol, "userID");
+
+        appointmentsValueMap = Collections.unmodifiableMap(tMap);
+
         firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         thirdCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -106,20 +109,19 @@ public class ReportsController implements Initializable {
     }
 
     public void setAppointmentsTable(){
-        for(TableColumn column: appointmentsTextMap.keySet()){
+        for(TableColumn<Appointment, String> column: appointmentsTextMap.keySet()){
             column.setText(appointmentsTextMap.get(column));
         }
 
-        for(TableColumn column: appointmentsValueMap.keySet()){
+        for(TableColumn<Appointment, String> column: appointmentsValueMap.keySet()){
             column.setCellValueFactory(new PropertyValueFactory<>(appointmentsValueMap.get(column)));
         }
         reportsTable.setItems(emptyList);
     }
 
     /**This method changes the table to display the information for the appointments by contact. It also sets the items for the contacts field with all the contacts
-     * from the database.
-     * @param actionEvent method is called when the user selects the contact schedule radio button.*/
-    public void onContactAppointments(ActionEvent actionEvent){
+     * from the database.*/
+    public void onContactAppointments(){
         firstCol.setText("Appt ID");
         secondCol.setText("Title");
         thirdCol.setText("Type");
@@ -161,10 +163,9 @@ public class ReportsController implements Initializable {
         }
     }
 
-    /**This method fills the table with appointments under the selected contact.
-     * @param actionEvent method is called once the user selects a contact from the combo box.*/
-    public void onContactSelection(ActionEvent actionEvent){
-        String contact = (String)contactsPicker.getSelectionModel().getSelectedItem();
+    /**This method fills the table with appointments under the selected contact.*/
+    public void onContactSelection(){
+        String contact = contactsPicker.getSelectionModel().getSelectedItem();
         int contactID = 0;
 
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = " + "'" + contact + "'";
@@ -187,9 +188,8 @@ public class ReportsController implements Initializable {
     }
 
     /**This method changes the table to display the information for the appointments by type. It also sets the items for the types field with all the types
-     * from the database.
-     * @param actionEvent method is called when the user selects the type appointments radio button.*/
-    public void onTypeAppointments(ActionEvent actionEvent) throws SQLException {
+     * from the database.*/
+    public void onTypeAppointments() throws SQLException {
         setAppointmentsTable();
         contactsPicker.setVisible(false);
         monthsPicker.setVisible(false);
@@ -205,10 +205,9 @@ public class ReportsController implements Initializable {
         typesPicker.setItems(types);
     }
 
-    /**This method fills the table with appointments under the selected type.
-     * @param actionEvent method is called once the user selects an appointment type.*/
-    public void onTypeSelection(ActionEvent actionEvent){
-        String type = (String)typesPicker.getSelectionModel().getSelectedItem();
+    /**This method fills the table with appointments under the selected type.*/
+    public void onTypeSelection(){
+        String type = typesPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> typeAppointments = FXCollections.observableArrayList();
         for(Appointment appointment : Appointment.getAllAppointments()){
             if(appointment.getType().equals(type)){
@@ -218,9 +217,8 @@ public class ReportsController implements Initializable {
         reportsTable.setItems(typeAppointments);
     }
 
-    /**This method changes the table to display appointments by month. It also sets the options for the months combo box.
-     * @param actionEvent method is called once the user selects the monthly appointments radio button.*/
-    public void onMonthlyAppointments(ActionEvent actionEvent){
+    /**This method changes the table to display appointments by month. It also sets the options for the months combo box.*/
+    public void onMonthlyAppointments(){
         setAppointmentsTable();
         contactsPicker.setVisible(false);
         typesPicker.setVisible(false);
@@ -231,10 +229,9 @@ public class ReportsController implements Initializable {
 
 
 
-    /**This method fills the table with appointments under the selected month.
-     * @param actionEvent method is called once the user selects a month.*/
-    public void onMonthlySelection(ActionEvent actionEvent){
-        String month = (String)monthsPicker.getSelectionModel().getSelectedItem();
+    /**This method fills the table with appointments under the selected month.*/
+    public void onMonthlySelection(){
+        String month = monthsPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
         for(Appointment appointment : Appointment.getAllAppointments()){
             if(appointment.getStart().substring(5,7).equals(month)){
@@ -263,9 +260,8 @@ public class ReportsController implements Initializable {
         return months;
     }
 
-    /**This method changes the table to display appointments by customer. It also sets the options for the customer combo box.
-     * @param actionEvent method is called once the user selects the customer appointments combo box.*/
-    public void onCustomerAppointments(ActionEvent actionEvent) throws SQLException {
+    /**This method changes the table to display appointments by customer. It also sets the options for the customer combo box.*/
+    public void onCustomerAppointments() throws SQLException {
         setAppointmentsTable();
         contactsPicker.setVisible(false);
         typesPicker.setVisible(false);
@@ -282,10 +278,9 @@ public class ReportsController implements Initializable {
         customerPicker.setItems(customers);
     }
 
-    /**This method fills the table with appointments under the selected customer.
-     * @param actionEvent method is called once the user selects a customer.*/
-    public void onCustomerSelection(ActionEvent actionEvent){
-        int customer = (Integer)customerPicker.getSelectionModel().getSelectedItem();
+    /**This method fills the table with appointments under the selected customer.*/
+    public void onCustomerSelection(){
+        int customer = customerPicker.getSelectionModel().getSelectedItem();
         ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
         for(Appointment appointment : Appointment.getAllAppointments()){
             if(appointment.getCustomerID() == customer){

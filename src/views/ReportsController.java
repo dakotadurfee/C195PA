@@ -1,35 +1,30 @@
 package views;
 
 import classes.Appointment;
-import classes.Customers;
-import views.mainMenuController;
 import helper.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**This method controls the reports page in the user interface.*/
 public class ReportsController implements Initializable {
 
-    public TableColumn firstCol;
+    public TableColumn<Appointment, Integer> firstCol;
     public TableColumn secondCol;
     public TableColumn thirdCol;
     public TableColumn fourthCol;
@@ -47,11 +42,42 @@ public class ReportsController implements Initializable {
     public ComboBox typesPicker;
     public ComboBox monthsPicker;
     public ComboBox customerPicker;
+    private Map<TableColumn, String> appointmentsTextMap;
+    private Map<TableColumn, String> appointmentsValueMap;
     private ObservableList<Appointment> emptyList = FXCollections.observableArrayList();
 
     /**This method is called when the reports page is loaded and sets the items for the contacts field with all the contacts from the database.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        appointmentsTextMap = new LinkedHashMap<>() {{
+            put(firstCol, "Appt ID");
+            put(secondCol, "Title");
+            put(thirdCol, "Description");
+            put(fourthCol, "Location");
+            put(fifthCol, "Contact");
+            put(sixthCol, "Type");
+            put(seventhCol, "Start Time");
+            put(eighthCol, "End Time");
+            put(ninthCol, "Start Date");
+            put(tenthCol, "Created By");
+            put(eleventhCol, "Customer ID");
+            put(twelfthCol, "User ID");
+        }};
+
+        appointmentsValueMap = new LinkedHashMap<>() {{
+            put(firstCol, "id");
+            put(secondCol, "title");
+            put(thirdCol, "description");
+            put(fourthCol, "location");
+            put(fifthCol, "contact");
+            put(sixthCol, "type");
+            put(seventhCol, "start");
+            put(eighthCol, "end");
+            put(ninthCol, "createDate");
+            put(tenthCol, "createdBy");
+            put(eleventhCol, "customerID");
+            put(twelfthCol, "userID");
+        }};
         firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         thirdCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -80,12 +106,12 @@ public class ReportsController implements Initializable {
     }
 
     public void setAppointmentsTable(){
-        for(TableColumn column: mainMenuController.appointmentsTextMap.keySet()){
-            column.setText(mainMenuController.appointmentsTextMap.get(column));
+        for(TableColumn column: appointmentsTextMap.keySet()){
+            column.setText(appointmentsTextMap.get(column));
         }
 
-        for(TableColumn column: mainMenuController.appointmentsValueMap.keySet()){
-            column.setCellValueFactory(new PropertyValueFactory<>(mainMenuController.appointmentsValueMap.get(column)));
+        for(TableColumn column: appointmentsValueMap.keySet()){
+            column.setCellValueFactory(new PropertyValueFactory<>(appointmentsValueMap.get(column)));
         }
         reportsTable.setItems(emptyList);
     }

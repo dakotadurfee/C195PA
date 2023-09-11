@@ -7,13 +7,8 @@ import helper.getContact;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static views.mainMenuController.mAppointment;
@@ -36,13 +30,13 @@ public class ModifyAppointmentController implements Initializable {
     public TextField descriptionField;
     public TextField locationField;
     public TextField typeField;
-    public ComboBox contactIDField;
+    public ComboBox<String> contactIDField;
     public TextField customerIDField;
     public DatePicker startDateField;
-    public Spinner startTimeHours;
-    public Spinner startTimeMinutes;
-    public Spinner endTimeHours;
-    public Spinner endTimeMinutes;
+    public Spinner<Integer> startTimeHours;
+    public Spinner<Integer> startTimeMinutes;
+    public Spinner<Integer> endTimeHours;
+    public Spinner<Integer> endTimeMinutes;
     public Button saveButton;
 
     /**This method sets the values of the fields to the information from the user selected appointment.*/
@@ -55,8 +49,8 @@ public class ModifyAppointmentController implements Initializable {
         typeField.setText(mAppointment.getType());
         try {
             contactIDField.setValue(getContactName(mAppointment.getContact()));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
         customerIDField.setText(Integer.toString(mAppointment.getCustomerID()));
         startDateField.setValue(LocalDate.of(Integer.parseInt(mAppointment.getStart().substring(0,4)), Integer.parseInt(mAppointment.getStart().substring(5,7)), Integer.parseInt(mAppointment.getStart().substring(8,10))));
@@ -80,7 +74,7 @@ public class ModifyAppointmentController implements Initializable {
         }
     }
 
-    /**This method saves all the user entered information for the selected appointment. It uses error checking to see if there are any blank fields or if there are characers in fields that require integers. It also checks
+    /**This method saves all the user entered information for the selected appointment. It uses error checking to see if there are any blank fields or if there are characters in fields that require integers. It also checks
      * to see if there are any overlapping appointments and if the user entered time is within company hours. If there are any errors it will display a message saying what the error is and will not save the information.
      * @param actionEvent method is called when the user presses the save button.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
@@ -90,7 +84,7 @@ public class ModifyAppointmentController implements Initializable {
         String description = null;
         String location = null;
         String type = null;
-        String contact = null;
+        String contact;
         int contactID = 0;
         if (titleField.getText().equals("")) {
             Main.showError("Title field cannot be blank");
@@ -120,7 +114,7 @@ public class ModifyAppointmentController implements Initializable {
             type = typeField.getText();
         }
 
-        contact = (String)contactIDField.getSelectionModel().getSelectedItem();
+        contact = contactIDField.getSelectionModel().getSelectedItem();
         if(contact == null){
             Main.showError("Must select contact");
             error = true;
@@ -157,7 +151,7 @@ public class ModifyAppointmentController implements Initializable {
         }
 
         String start = startDate + " " + startTimeH + ":" + startTimeM + ":" + "00";
-        if(dateError == false) {
+        if(!dateError) {
             LocalDateTime LDTstart = LocalDateTime.parse(startDate + "T" + startTimeH + ":" + startTimeM + ":" + "00");
 
             String endTimeH = endTimeHours.getValue().toString();
@@ -197,7 +191,7 @@ public class ModifyAppointmentController implements Initializable {
             } else {
                 for (Appointment appointment : Appointment.getAllAppointments()) {
                     if(appointment == mAppointment){
-
+                        break;
                     }
                     else if (customerID == appointment.getCustomerID()) {
                         String appointmentStart = appointment.getStart();
@@ -228,7 +222,7 @@ public class ModifyAppointmentController implements Initializable {
         lastUpdate = TimeConverter.toReadableString(lastUpdate);
 
         int appointmentID = Integer.parseInt(appointmentIDField.getText());
-        if(error == false && dateError == false) {
+        if(!error && !dateError) {
             mAppointment.setCustomerID(customerID);
             mAppointment.setTitle(title);
             mAppointment.setDescription(description);
@@ -272,18 +266,6 @@ public class ModifyAppointmentController implements Initializable {
         ps.executeUpdate();
     }
 
-    public int getContactID(String contact) throws SQLException {
-        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = '" + contact + "'";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        int contactID = 0;
-        while(rs.next()){
-            contactID = rs.getInt("Contact_ID");
-        }
-        return contactID;
-    }
-
     public String getContactName(int contactID) throws SQLException {
         String sql = "SELECT Contact_Name FROM contacts WHERE Contact_ID = '" + contactID + "'";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -293,5 +275,9 @@ public class ModifyAppointmentController implements Initializable {
             contactName = rs.getString("Contact_Name");
         }
         return contactName;
+    }
+
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
 }

@@ -490,3 +490,31 @@ Successful
 User log-in Attempt: 
 Date: 2023-09-11 17:03:42
 Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:11:44
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:13:33
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:15:15
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:15:51
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:24:00
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:27:43
+Successful
+
+User log-in Attempt: 
+Date: 2023-09-11 17:28:36
+Successful

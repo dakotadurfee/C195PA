@@ -1,21 +1,14 @@
 package views;
 
-import classes.Appointment;
 import classes.CountryData;
 import classes.Customers;
 import helper.JDBC;
 import helper.TimeConverter;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,9 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**This class controls the add customer page in the user interface.*/
@@ -35,8 +25,8 @@ public class AddCustomerController implements Initializable {
     public TextField addressField;
     public TextField postalCodeField;
     public TextField phoneField;
-    public ComboBox countryField;
-    public ComboBox divisionField;
+    public ComboBox<String> countryField;
+    public ComboBox<String> divisionField;
     public Button saveButton;
 
     /**This method fills the customer ID field with an auto generated value that is one higher than the highest customer ID value and fills the country field
@@ -44,7 +34,7 @@ public class AddCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         int i = Customers.getAllCustomers().size() - 1;
-        int dynamicID = 0;
+        int dynamicID;
         if(i < 0){
             dynamicID = 1;
         }
@@ -99,12 +89,7 @@ public class AddCustomerController implements Initializable {
         }
 
         try {
-            String countryName = (String) countryField.getSelectionModel().getSelectedItem();
-            String divisionName = (String) divisionField.getSelectionModel().getSelectedItem();
-            if(divisionName.equals(null)){
-                Main.showError("Must select country and division");
-                error = true;
-            }
+            String divisionName = divisionField.getSelectionModel().getSelectedItem();
             String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = " + "'" + divisionName + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -116,7 +101,7 @@ public class AddCustomerController implements Initializable {
             error = true;
         }
 
-        if(error == false) {
+        if(!error) {
             Customers customer = new Customers(customerID, customerName, address, postalCode, phone, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername(), divisionID);
             Customers.addCustomer(customer);
             addCustomerDB(customerID, customerName, address, postalCode, phone, createDate, lastUpdate, divisionID);
@@ -149,16 +134,22 @@ public class AddCustomerController implements Initializable {
 
     /**This method is called when a user selects a country, and it fills the division field with divisions from the selected country. It gets the division data
      * from the CountryData class. */
-    public void onCountrySelection(ActionEvent actionEvent) {
-        String country = (String)countryField.getSelectionModel().getSelectedItem();
-        if(country.equals("U.S")){
-            divisionField.setItems(CountryData.getUSdivisionList());
+    public void onCountrySelection() {
+        String country = countryField.getSelectionModel().getSelectedItem();
+        switch (country) {
+            case "U.S":
+                divisionField.setItems(CountryData.getUSdivisionList());
+                break;
+            case "UK":
+                divisionField.setItems(CountryData.getUKdivisionList());
+                break;
+            case "Canada":
+                divisionField.setItems(CountryData.getCanadadivisionList());
+                break;
         }
-        else if(country.equals("UK")){
-            divisionField.setItems(CountryData.getUKdivisionList());
-        }
-        else if(country.equals("Canada")){
-            divisionField.setItems(CountryData.getCanadadivisionList());
-        }
+    }
+
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
 }

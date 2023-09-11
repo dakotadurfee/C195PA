@@ -3,16 +3,10 @@ package views;
 import helper.TimeConverter;
 import helper.JDBC;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,7 +31,6 @@ public class loginController implements Initializable {
     public Label language;
     public Label timeZone;
     private static String DBusername;
-    private String tAlert;
     private static int userID;
 
     /**This method checks to see what language and time zone the user's computer is using. It translates all the words in the application to the user's language and
@@ -49,7 +42,7 @@ public class loginController implements Initializable {
         username.setText(resourceBundle.getString("username"));
         password.setText(resourceBundle.getString("password"));
         language.setText(locale.getLanguage());
-        tAlert = resourceBundle.getString("alertMessage");
+        resourceBundle.getString("alertMessage");
         TimeZone zone = TimeZone.getTimeZone(TimeZone.getDefault().toZoneId());
         timeZone.setText(zone.getDisplayName());
     }
@@ -108,7 +101,7 @@ public class loginController implements Initializable {
     }
 
     public void setUserID(int userID){
-        this.userID = userID;
+        loginController.userID = userID;
     }
 
     public static int getUserID(){

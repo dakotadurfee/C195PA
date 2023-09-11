@@ -4,15 +4,9 @@ import classes.CountryData;
 import helper.JDBC;
 import helper.TimeConverter;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,9 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static views.mainMenuController.mCustomer;
@@ -34,8 +25,8 @@ public class ModifyCustomerController implements Initializable {
     public TextField addressField;
     public TextField postalCodeField;
     public TextField phoneField;
-    public ComboBox countryField;
-    public ComboBox divisionField;
+    public ComboBox<String> countryField;
+    public ComboBox<String> divisionField;
 
     /**This method sets the values of the fields to the information from the user selected customer.*/
     @Override
@@ -66,24 +57,25 @@ public class ModifyCustomerController implements Initializable {
         countryField.setItems(CountryData.getCountryList());
     }
 
-    /**This method fills the division field with all available divisions from the customers country.
-     * @param actionEvent method is called once the user*/
-    public void onCountrySelection(ActionEvent actionEvent) {
-        String country = (String)countryField.getSelectionModel().getSelectedItem();
-        if(country.equals("U.S")){
-            divisionField.setItems(CountryData.getUSdivisionList());
-        }
-        else if(country.equals("UK")){
-            divisionField.setItems(CountryData.getUKdivisionList());
-        }
-        else if(country.equals("Canada")){
-            divisionField.setItems(CountryData.getCanadadivisionList());
+    /**This method fills the division field with all available divisions from the customers country.  */
+    public void onCountrySelection() {
+        String country = countryField.getSelectionModel().getSelectedItem();
+        switch (country) {
+            case "U.S":
+                divisionField.setItems(CountryData.getUSdivisionList());
+                break;
+            case "UK":
+                divisionField.setItems(CountryData.getUKdivisionList());
+                break;
+            case "Canada":
+                divisionField.setItems(CountryData.getCanadadivisionList());
+                break;
         }
     }
 
     /**This method gets the division name from the database based off the selected customer's division ID and sets the division field's value to that name.*/
     public void getDivision() throws SQLException {
-        String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = " + Integer.toString(mCustomer.getDivisionID());
+        String sql = "SELECT Division FROM first_level_divisions WHERE Division_ID = " + mCustomer.getDivisionID();
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
@@ -98,7 +90,6 @@ public class ModifyCustomerController implements Initializable {
      * @param actionEvent method is called when the user presses the save button.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException{
         boolean error = false;
-        int customerID = Integer.parseInt(customerIDField.getText());
         String customerName = null;
         String address = null;
         String postalCode = null;
@@ -133,12 +124,7 @@ public class ModifyCustomerController implements Initializable {
         }
 
         try {
-            String countryName = (String) countryField.getSelectionModel().getSelectedItem();
-            String divisionName = (String) divisionField.getSelectionModel().getSelectedItem();
-            if(divisionName.equals(null)){
-                Main.showError("Must select country and division");
-                error = true;
-            }
+            String divisionName = divisionField.getSelectionModel().getSelectedItem();
             String sql = "SELECT Division_ID FROM first_level_divisions WHERE Division = " + "'" + divisionName + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -150,7 +136,7 @@ public class ModifyCustomerController implements Initializable {
             error = true;
         }
 
-        if(error == false){
+        if(!error){
             mCustomer.setCustomerName(customerName);
             mCustomer.setAddress(address);
             mCustomer.setPostalCode(postalCode);
@@ -182,5 +168,9 @@ public class ModifyCustomerController implements Initializable {
         ps.setString(7, loginController.getDBusername());
         ps.setInt(8, divisionID);
         ps.executeUpdate();
+    }
+
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
 }

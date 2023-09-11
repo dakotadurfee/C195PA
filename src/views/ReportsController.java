@@ -295,6 +295,4 @@ public class ReportsController implements Initializable {
     public void toMain(ActionEvent actionEvent) throws IOException {
         Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
-
-
 }

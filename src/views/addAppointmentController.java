@@ -3,20 +3,13 @@ package views;
 import classes.Appointment;
 import classes.Customers;
 import helper.JDBC;
-import helper.LDTtoStringInterface;
-import helper.contactIDInterface;
 import helper.getContact;
 import helper.TimeConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**This class controls the add appointment page in the user interface.*/
@@ -34,23 +26,23 @@ public class addAppointmentController implements Initializable {
     public TextField descriptionField;
     public TextField locationField;
     public TextField typeField;
-    public TextField contactIDField;
+
     public TextField customerIDField;
-    public TextField userIDField;
+
     public DatePicker startDateField;
-    public DatePicker endDateField;
+
     public Button addAppointmentSave;
-    public Spinner startTimeHours;
-    public Spinner startTimeMinutes;
-    public Spinner endTimeHours;
-    public Spinner endTimeMinutes;
-    public ComboBox contactField;
+    public Spinner<String> startTimeHours;
+    public Spinner<String> startTimeMinutes;
+    public Spinner<String> endTimeHours;
+    public Spinner<String> endTimeMinutes;
+    public ComboBox<String> contactField;
 
     /**This method fills the appointment id field with an auto generated value that is one higher than the highest appointment ID value and fills the
      * contact field with all the names from the contacts table in the database.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        int dynamicID = 0;
+        int dynamicID;
         int i = Appointment.getAllAppointments().size() - 1;
         if(i < 0) {
             dynamicID = 1;
@@ -83,13 +75,13 @@ public class addAppointmentController implements Initializable {
      * information.
      * @param actionEvent method is called when the save button is clicked.*/
     public void onSave(ActionEvent actionEvent) throws IOException, SQLException {
-        int dynamicID = 0;
+        int dynamicID;
         boolean error = false;
         boolean dateError = false;
         String title = null;
         String description = null;
         String location = null;
-        String contact = null;
+        String contact;
         String createDate = LocalDateTime.now().toString();
         int contactID = 0;
         String type = null;
@@ -122,7 +114,7 @@ public class addAppointmentController implements Initializable {
         }
 
 
-        contact = (String)contactField.getSelectionModel().getSelectedItem();
+        contact = contactField.getSelectionModel().getSelectedItem();
         if(contact == null){
             Main.showError("Must select contact");
             error = true;
@@ -137,11 +129,12 @@ public class addAppointmentController implements Initializable {
             customerID = Integer.parseInt(customerIDField.getText());
             boolean found = false;
             for(Customers customer : Customers.getAllCustomers()){
-                if(customer.getCustomerID() == customerID){
+                if (customer.getCustomerID() == customerID) {
                     found = true;
+                    break;
                 }
             }
-            if(found == false){
+            if(!found){
                 Main.showError("Customer ID does not match an existing customer ID");
                 error = true;
             }
@@ -159,8 +152,8 @@ public class addAppointmentController implements Initializable {
             dateError = true;
         }
 
-        String startTimeH = startTimeHours.getValue().toString();
-        String startTimeM = startTimeMinutes.getValue().toString();
+        String startTimeH = String.valueOf(startTimeHours.getValue());
+        String startTimeM = String.valueOf(startTimeMinutes.getValue());
         if(Integer.parseInt(startTimeH) < 10) {
             startTimeH = "0" + startTimeH;
         }
@@ -170,11 +163,11 @@ public class addAppointmentController implements Initializable {
         }
 
         String start = startDate + " " + startTimeH + ":" + startTimeM + ":" + "00";
-        if(dateError == false) {
+        if(!dateError) {
             LocalDateTime LDTstart = LocalDateTime.parse(startDate + "T" + startTimeH + ":" + startTimeM + ":" + "00");
 
-            String endTimeH = endTimeHours.getValue().toString();
-            String endTimeM = endTimeMinutes.getValue().toString();
+            String endTimeH = String.valueOf(endTimeHours.getValue());
+            String endTimeM = String.valueOf(endTimeMinutes.getValue());
 
             if (Integer.parseInt(endTimeH) < 10) {
                 endTimeH = "0" + endTimeH;
@@ -247,17 +240,17 @@ public class addAppointmentController implements Initializable {
         else {
             dynamicID = Appointment.getAllAppointments().get(i).getId() + 1;
         }
-        if (error == false && dateError == false) {
+        if (!error && !dateError) {
             Appointment appointment = new Appointment(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
             Appointment.addAppointment(appointment);
-            addAppointmentDB(dynamicID, customerID, loginController.getUserID(), title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), lastUpdate, loginController.getDBusername());
+            addAppointmentDB(dynamicID, customerID, title, description, location, contactID, type, start, end, createDate, loginController.getDBusername(), loginController.getDBusername());
             Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
         }
     }
 
     /**This method is called at the end of the onSave method and takes all the variables needed for the database and adds an appointment to the appointments table.*/
-    public void addAppointmentDB(int appointmentID, int customerID, int userID, String title, String description, String location, int contactID, String type, String start, String end, String createDate,
-                                 String createdBy, String lastUpdate, String lastUpdateBy) throws SQLException {
+    public void addAppointmentDB(int appointmentID, int customerID, String title, String description, String location, int contactID, String type, String start, String end, String createDate,
+                                 String createdBy, String lastUpdateBy) throws SQLException {
 
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -268,7 +261,7 @@ public class addAppointmentController implements Initializable {
         start = TimeConverter.toUTCTime(start);
         end = TimeConverter.toUTCTime(end);
         createDate = TimeConverter.toUTCTime(createDate);
-        lastUpdate = createDate;
+        String lastUpdate = createDate;
 
         ps.setInt(1, appointmentID);
         ps.setString(2,title);
@@ -279,11 +272,15 @@ public class addAppointmentController implements Initializable {
         ps.setString(7,end);
         ps.setString(8,createDate);
         ps.setString(9,createdBy);
-        ps.setString(10,lastUpdate);
+        ps.setString(10, lastUpdate);
         ps.setString(11,lastUpdateBy);
         ps.setInt(12,customerID);
         ps.setInt(13,loginController.getUserID());
         ps.setInt(14,contactID);
         ps.executeUpdate();
+    }
+
+    public void toMain(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/mainMenu.fxml", 1449, 400, "Main Menu", actionEvent);
     }
 }

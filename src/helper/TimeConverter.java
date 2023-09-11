@@ -43,4 +43,26 @@ public class TimeConverter{
         };
         return toUserTime.ToUTCTime(s);
     }
+
+    /** Uses a lambda expression to change UTC time from database to User time
+     * @param s takes a string and converts it to user time.
+     * @return returns string in user time.*/
+    public static String toUserTime(String s){
+        UTCToUserTimeInterface UTCToUserTime = (string) -> {
+            DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            LocalDateTime utc_start_dt = LocalDateTime.parse(string, dt_formatter);
+
+            ZoneId utc_zone = ZoneId.of("UTC");
+            ZoneId user_zone = ZoneId.systemDefault();
+
+            ZonedDateTime utc_zdt = utc_start_dt.atZone(utc_zone);
+
+            ZonedDateTime user_zdt = utc_zdt.withZoneSameInstant(user_zone);
+
+            string = user_zdt.toLocalDateTime().format(dt_formatter);
+            return string;
+        };
+        return UTCToUserTime.UTCToUserTime(s);
+    }
 }

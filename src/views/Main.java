@@ -4,6 +4,7 @@ import classes.Appointment;
 import classes.CountryData;
 import classes.Customers;
 import helper.JDBC;
+import helper.TimeConverter;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -93,25 +94,8 @@ public class Main extends Application {
             int userID = rs.getInt("User_ID");
             int contactID = rs.getInt("Contact_ID");
 
-            String db_start = rs.getString("Start");
-            String db_end = rs.getString("End");
-
-            DateTimeFormatter dt_formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            LocalDateTime utc_start_dt = LocalDateTime.parse(db_start, dt_formatter);
-            LocalDateTime utc_end_dt = LocalDateTime.parse(db_end, dt_formatter);
-
-            ZoneId utc_zone = ZoneId.of("UTC");
-            ZoneId user_zone = ZoneId.systemDefault();
-
-            ZonedDateTime utc_start_zdt = utc_start_dt.atZone(utc_zone);
-            ZonedDateTime utc_end_zdt = utc_end_dt.atZone(utc_zone);
-
-            ZonedDateTime user_start_zdt = utc_start_zdt.withZoneSameInstant(user_zone);
-            ZonedDateTime user_end_zdt = utc_end_zdt.withZoneSameInstant(user_zone);
-
-            String start = user_start_zdt.toLocalDateTime().format(dt_formatter);
-            String end = user_end_zdt.toLocalDateTime().format(dt_formatter);
+            String start = TimeConverter.toUserTime(rs.getString("Start"));
+            String end = TimeConverter.toUserTime(rs.getString("End"));
 
             Appointment appointment = new Appointment(appointment_ID, customerID, userID, title, description, location, contactID, type, start, end, createDate, createdBy, lastUpdate, lastUpdatedBy);
             Appointment.addAppointment(appointment);

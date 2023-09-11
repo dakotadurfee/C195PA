@@ -26,9 +26,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**This class controls the main menu of the application.*/
 public class mainMenuController implements Initializable {
@@ -55,28 +53,77 @@ public class mainMenuController implements Initializable {
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
     private static boolean called = false;
+    private Map<TableColumn, String> appointmentsTextMap;
+    private Map<TableColumn, String> appointmentsValueMap;
+    private Map<TableColumn, String> customersTextMap;
+    private Map<TableColumn, String> customersValueMap;
 
     /**This method is called every time the user is sent to the main menu and populates the table with all the scheduled appointments. The first time it is called
      * it displays a message saying if there are any upcoming appointments or not. It does not indicate if there are upcoming appointments after the first time the
      * method is called.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        appointmentsTable.setItems(Appointment.getAllAppointments());
-        addCustomer.setVisible(false);
-        modifyCustomerButton.setVisible(false);
-        deleteCustomerButton.setVisible(false);
+        appointmentsTextMap = new LinkedHashMap<>() {{
+            put(firstCol, "Appt ID");
+            put(secondCol, "Title");
+            put(thirdCol, "Description");
+            put(fourthCol, "Location");
+            put(fifthCol, "Contact");
+            put(sixthCol, "Type");
+            put(seventhCol, "Start Time");
+            put(eighthCol, "End Time");
+            put(ninthCol, "Start Date");
+            put(tenthCol, "Created By");
+            put(eleventhCol, "Customer ID");
+            put(twelfthCol, "User ID");
+        }};
+
+        appointmentsValueMap = new LinkedHashMap<>() {{
+            put(firstCol, "id");
+            put(secondCol, "title");
+            put(thirdCol, "description");
+            put(fourthCol, "location");
+            put(fifthCol, "contact");
+            put(sixthCol, "type");
+            put(seventhCol, "start");
+            put(eighthCol, "end");
+            put(ninthCol, "createDate");
+            put(tenthCol, "createdBy");
+            put(eleventhCol, "customerID");
+            put(twelfthCol, "userID");
+        }};
+
+        customersTextMap = new LinkedHashMap<>() {{
+            put(firstCol, "Customer_ID");
+            put(secondCol, "Customer_Name");
+            put(thirdCol, "Address");
+            put(fourthCol, "Postal_Code");
+            put(fifthCol, "Phone");
+            put(sixthCol, "Create_Date");
+            put(seventhCol, "Created_By");
+            put(eighthCol, "Last_Update");
+            put(ninthCol, "Last_Updated_By");
+            put(tenthCol, "Division_ID");
+            put(eleventhCol, "");
+            put(twelfthCol, "");
+        }};
+
+        customersValueMap = new LinkedHashMap<>(){{
+            put(firstCol, "customerID");
+            put(secondCol, "customerName");
+            put(thirdCol, "address");
+            put(fourthCol, "postalCode");
+            put(fifthCol, "phone");
+            put(sixthCol, "createDate");
+            put(seventhCol, "createdBy");
+            put(eighthCol, "lastUpdate");
+            put(ninthCol, "lastUpdatedBy");
+            put(tenthCol, "divisionID");
+            put(eleventhCol, "");
+            put(twelfthCol, "");
+        }};
+
+        setAppointmentsTable(Appointment.getAllAppointments());
 
         if(!called) {
             ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
@@ -121,57 +168,32 @@ public class mainMenuController implements Initializable {
         }
     }
 
-    /**This method is called when the user clicks the add appointment button, and it takes the user to the add appointment page.
-     * @param actionEvent method is called when the user presses the add appointment button.*/
-    public void addAppointment(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/addAppointment.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 820, 491);
-        stage.setTitle("Add Appointment");
-        stage.setScene(scene);
-        stage.show();
+    public void setAppointmentsTable(ObservableList<Appointment> items){
+        for(TableColumn column: appointmentsTextMap.keySet()){
+            column.setText(appointmentsTextMap.get(column));
+        }
+
+        for(TableColumn column: appointmentsValueMap.keySet()){
+            column.setCellValueFactory(new PropertyValueFactory<>(appointmentsValueMap.get(column)));
+        }
+        appointmentsTable.setItems(items);
+        addCustomer.setVisible(false);
+        modifyCustomerButton.setVisible(false);
+        deleteCustomerButton.setVisible(false);
+        addAppointmentButton.setVisible(true);
+        modifyAppointment.setVisible(true);
+        deleteAppointmentButton.setVisible(true);
     }
 
-    /**This method is called when the suer clicks the add customer button, and it takes the user to the add customer page.
-     * @param actionEvent method is called when the user presses the add customer button.*/
-    public void addCustomer(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/AddCustomer.fxml"));
-        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 820, 608);
-        stage.setTitle("Add Customer");
-        stage.setScene(scene);
-        stage.show();
-    }
+    public void setCustomersTable(ObservableList<Customers> items){
+        for(TableColumn column: customersTextMap.keySet()){
+            column.setText(customersTextMap.get(column));
+        }
 
-    /**This method is called when the user clicks the customers radio button, and it changes the table to display all the customers.
-     * @param actionEvent method is called when the user presses the customers radio button.*/
-    public void viewCustomers(ActionEvent actionEvent) {
-        firstCol.setText("Customer_ID");
-        secondCol.setText("Customer_Name");
-        thirdCol.setText("Address");
-        fourthCol.setText("Postal_Code");
-        fifthCol.setText("Phone");
-        sixthCol.setText("Create_Date");
-        seventhCol.setText("Created_By");
-        eighthCol.setText("Last_Update");
-        ninthCol.setText("Last_Updated_By");
-        tenthCol.setText("Division_ID");
-        eleventhCol.setText("");
-        twelfthCol.setText("");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>(""));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>(""));
-        appointmentsTable.setItems(Customers.getAllCustomers());
+        for(TableColumn column: customersValueMap.keySet()){
+            column.setCellValueFactory(new PropertyValueFactory<>(customersValueMap.get(column)));
+        }
+        appointmentsTable.setItems(items);
         addCustomer.setVisible(true);
         modifyCustomerButton.setVisible(true);
         deleteCustomerButton.setVisible(true);
@@ -180,34 +202,27 @@ public class mainMenuController implements Initializable {
         deleteAppointmentButton.setVisible(false);
     }
 
+    /**This method is called when the user clicks the add appointment button, and it takes the user to the add appointment page.
+     * @param actionEvent method is called when the user presses the add appointment button.*/
+    public void addAppointment(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/addAppointment.fxml", 820, 491, "Add Appointment", actionEvent);
+    }
+
+    /**This method is called when the suer clicks the add customer button, and it takes the user to the add customer page.
+     * @param actionEvent method is called when the user presses the add customer button.*/
+    public void addCustomer(ActionEvent actionEvent) throws IOException {
+        Main.switchScene("/views/AddCustomer.fxml", 820, 608, "Add Customer", actionEvent);
+    }
+
+    /**This method is called when the user clicks the customers radio button, and it changes the table to display all the customers.
+     * @param actionEvent method is called when the user presses the customers radio button.*/
+    public void viewCustomers(ActionEvent actionEvent) {
+        setCustomersTable(Customers.getAllCustomers());
+    }
+
     /**This method is called when the user selects the monthly radio button, and it displays all the appointments that are in the current month.
      * @param actionEvent method is called when the user presses the monthly radio button.*/
     public void onMonthly(ActionEvent actionEvent){
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         LocalDateTime currentLDT = LocalDateTime.now();
         String currentMonth = currentLDT.toString();
         currentMonth = currentMonth.substring(5,7);
@@ -218,44 +233,12 @@ public class mainMenuController implements Initializable {
                 monthlyAppointments.add(appointment);
             }
         }
-        appointmentsTable.setItems(monthlyAppointments);
-        addCustomer.setVisible(false);
-        modifyCustomerButton.setVisible(false);
-        deleteCustomerButton.setVisible(false);
-        addAppointmentButton.setVisible(true);
-        modifyAppointment.setVisible(true);
-        deleteAppointmentButton.setVisible(true);
+        setAppointmentsTable(monthlyAppointments);
     }
 
     /**This method is called when the user selects the weekly radio button, and it displays all the appointments that are in the current week.
      * @param actionEvent method is called when the user presses the weekly radio button.*/
     public void onWeekly(ActionEvent actionEvent){
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-
         LocalDateTime currentLDT = LocalDateTime.now();
         LocalDateTime sundayBefore = currentLDT.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDateTime saturdayAfter = currentLDT.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
@@ -270,51 +253,13 @@ public class mainMenuController implements Initializable {
             }
         }
 
-        appointmentsTable.setItems(weeklyAppointments);
-        addCustomer.setVisible(false);
-        modifyCustomerButton.setVisible(false);
-        deleteCustomerButton.setVisible(false);
-        addAppointmentButton.setVisible(true);
-        modifyAppointment.setVisible(true);
-        deleteAppointmentButton.setVisible(true);
+        setAppointmentsTable(weeklyAppointments);
     }
 
     /**This method is called when the user selects the all appointments radio button, and it displays all the scheduled appointments.
      * @param actionEvent method is called when the user presses the all appointments radio button.*/
     public void onAll(ActionEvent actionEvent){
-        firstCol.setText("Appt ID");
-        secondCol.setText("Title");
-        thirdCol.setText("Description");
-        fourthCol.setText("Location");
-        fifthCol.setText("Contact");
-        sixthCol.setText("Type");
-        seventhCol.setText("Start Time");
-        eighthCol.setText("End Time");
-        ninthCol.setText("Start Date");
-        tenthCol.setText("Created By");
-        eleventhCol.setText("Customer ID");
-        twelfthCol.setText("User ID");
-
-        firstCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        secondCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        thirdCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        fourthCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        fifthCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        sixthCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        seventhCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        eighthCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-        ninthCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        tenthCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        eleventhCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        twelfthCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        appointmentsTable.setItems(Appointment.getAllAppointments());
-        addCustomer.setVisible(false);
-        modifyCustomerButton.setVisible(false);
-        deleteCustomerButton.setVisible(false);
-        addAppointmentButton.setVisible(true);
-        modifyAppointment.setVisible(true);
-        deleteAppointmentButton.setVisible(true);
-
+        setAppointmentsTable(Appointment.getAllAppointments());
     }
 
     /**This method takes the user to the modify appointment page if the user selected an appointment and displays an error message if the user did not select an

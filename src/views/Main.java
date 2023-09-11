@@ -6,21 +6,15 @@ import classes.Customers;
 import helper.JDBC;
 import helper.TimeConverter;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**This class starts the application.*/
 public class Main extends Application {
@@ -28,7 +22,7 @@ public class Main extends Application {
     /**This method loads the first screen in the application which is the login form.*/
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login.fxml")));
         primaryStage.setTitle("Log In");
         primaryStage.setScene(new Scene(root, 460, 242));
         primaryStage.show();
